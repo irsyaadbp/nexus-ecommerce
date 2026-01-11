@@ -8,10 +8,12 @@ import Dashboard from "./pages/admin/Dashboard";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminRegister from "./pages/admin/AdminRegister";
 import AdminProducts from "./pages/admin/AdminProducts";
+import DefaultLayout from "./components/DefaultLayout";
 
 const router = createBrowserRouter([
     {
         path: "/",
+        element: <DefaultLayout />,
         children: [
             {
                 path: "/",

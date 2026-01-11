@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
 
 const banners = [
     {
@@ -66,7 +67,7 @@ export function HeroBanner() {
                                             animate={{ x: 0, opacity: 1 }}
                                             transition={{ delay: 0.3, duration: 0.5 }}
                                         >
-                                            <span className="badge badge-primary">{banner.subtitle}</span>
+                                            <Badge>{banner.subtitle}</Badge>
                                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground">
                                                 {banner.title}
                                             </h1>
