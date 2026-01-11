@@ -34,7 +34,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                     {/* Image Container */}
                     <div className="relative aspect-square overflow-hidden bg-secondary/30">
                         <motion.img
-                            src={product.image}
+                            src={product.images?.[0]}
                             alt={product.name}
                             className="h-full w-full object-cover"
                             whileHover={{ scale: 1.1 }}

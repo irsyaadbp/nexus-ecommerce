@@ -2,6 +2,15 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { productService, type CreateProductPayload, type UpdateProductPayload } from "@/services/product.service";
 import { toast } from "sonner";
 
+// User (public) hooks
+export const useUserProducts = (params: Record<string, string>) => {
+    return useQuery({
+        queryKey: ["user-products", params],
+        queryFn: () => productService.getUserProducts(params),
+    });
+};
+
+// Admin hooks
 export const useAdminProducts = (params: Record<string, string>) => {
     return useQuery({
         queryKey: ["admin-products", params],

@@ -66,7 +66,7 @@ export function DialogProductMutation({
 
     useEffect(() => {
         if (editingProduct) {
-            const productImages = editingProduct.images || (editingProduct.image ? [editingProduct.image] : []);
+            const productImages = editingProduct.images || [];
             // Transform variants from { name: string }[] to string[]
             const productVariants = editingProduct.variants?.map(v => v.name) || [];
             reset({

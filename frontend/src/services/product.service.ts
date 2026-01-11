@@ -48,6 +48,12 @@ export interface UpdateProductPayload {
 }
 
 export const productService = {
+    // User (public) API
+    getUserProducts: async (params: Record<string, string>) => {
+        return fetcher<ProductsResponse>("/user/products", { params });
+    },
+
+    // Admin API
     getAdminProducts: async (params: Record<string, string>) => {
         return fetcher<ProductsResponse>("/admin/products", { params });
     },

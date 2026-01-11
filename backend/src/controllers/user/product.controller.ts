@@ -4,7 +4,7 @@ import { successResponse, errorResponse } from '../../utils/response';
 
 export const getProducts = async (req: Request, res: Response) => {
     try {
-        const { page = 1, limit = 10, category, minPrice, maxPrice, name, sortBy, sortOrder } = req.query;
+        const { page = 1, limit = 10, category, minPrice, maxPrice, name, sortBy, sortOrder, isSale } = req.query;
 
         const filter: any = {};
         if (category) filter.category = category;
@@ -14,6 +14,11 @@ export const getProducts = async (req: Request, res: Response) => {
             if (maxPrice) filter.price.$lte = Number(maxPrice);
         }
         if (name) filter.name = { $regex: name, $options: 'i' };
+
+        // Filter products with originalPrice (on sale)
+        if (isSale === 'true') {
+            filter.originalPrice = { $exists: true, $ne: null };
+        }
 
         const skip = (Number(page) - 1) * Number(limit);
 

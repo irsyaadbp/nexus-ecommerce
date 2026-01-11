@@ -74,7 +74,7 @@ export default function ProductDetail() {
                         >
                             <motion.img
                                 key={selectedImage}
-                                src={product.images?.[selectedImage] || product.image}
+                                src={product.images?.[selectedImage] || product.images?.[0]}
                                 alt={product.name}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}

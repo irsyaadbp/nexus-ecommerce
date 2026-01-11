@@ -3,11 +3,23 @@ import { HeroBanner } from "../components/Homepage/HeroBanner";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router";
 import { ProductCard } from "@/components/ProductCard";
-import { products } from "@/mock/products";
 import { Button } from "@/components/ui/button";
+import { useUserProducts } from "@/hooks/useProducts";
 
 export default function Home() {
-    const saleProducts = products
+    // Fetch sale products (products with originalPrice)
+    const { data: saleProductsData } = useUserProducts({
+        isSale: "true",
+        limit: "4"
+    });
+    const saleProducts = saleProductsData?.data?.products || [];
+
+    // Fetch all products
+    const { data: allProductsData } = useUserProducts({
+        limit: "8"
+    });
+    const allProducts = allProductsData?.data?.products || [];
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -62,7 +74,7 @@ export default function Home() {
                         <div className="flex items-center gap-3">
                             <div className="h-8 w-1 bg-primary rounded-full" />
                             <h2 className="text-xl font-bold text-foreground">Semua Produk</h2>
-                            <span className="text-sm text-muted-foreground">({products.length})</span>
+                            <span className="text-sm text-muted-foreground">({allProducts.length})</span>
                         </div>
                     </motion.div>
 
@@ -74,7 +86,7 @@ export default function Home() {
                         whileInView="visible"
                         viewport={{ once: true }}
                     >
-                        {products.map((product, index) => (
+                        {allProducts.map((product, index) => (
                             <ProductCard key={product._id} product={product} index={index} />
                         ))}
                     </motion.div>

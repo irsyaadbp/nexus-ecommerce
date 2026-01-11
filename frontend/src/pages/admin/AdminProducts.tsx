@@ -84,7 +84,7 @@ export default function AdminProducts() {
             render: (value, product) => (
                 <div className="flex items-center gap-3">
                     <img
-                        src={product.images?.[0] || product.image}
+                        src={product.images?.[0]}
                         alt={product.name}
                         className="h-12 w-12 rounded-lg object-cover"
                     />
