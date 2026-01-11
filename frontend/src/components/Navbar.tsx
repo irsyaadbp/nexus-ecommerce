@@ -42,9 +42,11 @@ const Header = () => {
                         <ShoppingBag className="h-5 w-5" />
 
                     </Button>
-                    <Button className="hidden lg:block">
-                        Login/Register
-                    </Button>
+                    <Link to="/login">
+                        <Button className="hidden lg:block">
+                            Login/Register
+                        </Button>
+                    </Link>
                     <Button
                         size="icon"
                         variant={'ghost'}
@@ -72,9 +74,11 @@ const Header = () => {
                                 {link.name}
                             </Link>
                         ))}
-                        <Button className="mt-8">
-                            Login/Register
-                        </Button>
+                        <Link to="/login" className="w-full">
+                            <Button className="mt-6 w-full">
+                                Login/Register
+                            </Button>
+                        </Link>
                     </nav>
                 </div>
             )}
