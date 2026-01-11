@@ -36,6 +36,7 @@ Nexus is your one-stop solution for a modern e-commerce experience. This project
    yarn install
    ```
 4. **Run Database Seeder** (Optional):
+   Use this command to add dummy data for users and products:
    ```bash
    pnpm seed
    ```
