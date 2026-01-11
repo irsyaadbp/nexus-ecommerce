@@ -1,17 +1,15 @@
 import { products } from "@/mock/products";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { motion } from "motion/react";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+
 import { Input } from "@/components/ui/input";
 import { ProductCard } from "@/components/ProductCard";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
 const PRODUCTS_PER_PAGE = 4;
-
-const MotionButton = motion(Button)
 
 export default function Products() {
     const [selectedCategory, setSelectedCategory] = useState("all");
