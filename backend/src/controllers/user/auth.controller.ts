@@ -3,6 +3,7 @@ import User from '../../models/user.model';
 import { successResponse, errorResponse } from '../../utils/response';
 import { signToken } from '../../utils/jwt.utils';
 import { RegisterInput, LoginInput } from '../../utils/auth.schema';
+import { AuthRequest } from '../../middlewares/auth.middleware';
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -68,6 +69,14 @@ export const login = async (req: Request, res: Response) => {
             },
         });
     } catch (error: any) {
-        return errorResponse(res, 'Login failed', error.message, 500);
+        return errorResponse(res, 'User login failed', error.message, 500);
     }
+};
+
+export const getMe = async (req: AuthRequest, res: Response) => {
+    return successResponse(res, 'User profile retrieved successfully', req.user);
+};
+
+export const logout = async (req: AuthRequest, res: Response) => {
+    return successResponse(res, 'User logged out successfully', null);
 };

@@ -3,6 +3,7 @@ import User from '../../models/user.model';
 import { successResponse, errorResponse } from '../../utils/response';
 import { signToken } from '../../utils/jwt.utils';
 import { LoginInput } from '../../utils/auth.schema';
+import { AuthRequest } from '../../middlewares/auth.middleware';
 
 export const login = async (req: Request, res: Response) => {
     try {
@@ -37,6 +38,14 @@ export const login = async (req: Request, res: Response) => {
             },
         });
     } catch (error: any) {
-        return errorResponse(res, 'Login failed', error.message, 500);
+        return errorResponse(res, 'Admin login failed', error.message, 500);
     }
+};
+
+export const getMe = async (req: AuthRequest, res: Response) => {
+    return successResponse(res, 'Admin profile retrieved successfully', req.user);
+};
+
+export const logout = async (req: AuthRequest, res: Response) => {
+    return successResponse(res, 'Admin logged out successfully', null);
 };

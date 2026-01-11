@@ -2,6 +2,7 @@ import { Router } from 'express';
 import * as authController from '../../controllers/user/auth.controller';
 import { validate } from '../../middlewares/validate';
 import { registerSchema, loginSchema } from '../../utils/auth.schema';
+import { protect } from '../../middlewares/auth.middleware';
 
 const router = Router();
 
@@ -24,7 +25,7 @@ const router = Router();
  *             properties:
  *               email:
  *                 type: string
- *                 example: customer@example.com
+ *                 example: user@nexus.com
  *               username:
  *                 type: string
  *                 example: customer_user
@@ -62,7 +63,7 @@ router.post('/register', validate(registerSchema), authController.register);
  *             properties:
  *               email:
  *                 type: string
- *                 example: customer@example.com
+ *                 example: user@nexus.com
  *               password:
  *                 type: string
  *                 example: Password123
@@ -73,5 +74,35 @@ router.post('/register', validate(registerSchema), authController.register);
  *         description: Invalid credentials
  */
 router.post('/login', validate(loginSchema), authController.login);
+
+/**
+ * @openapi
+ * /user/me:
+ *   get:
+ *     tags:
+ *       - User Auth
+ *     summary: Get current user profile
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success
+ */
+router.get('/me', protect, authController.getMe);
+
+/**
+ * @openapi
+ * /user/logout:
+ *   post:
+ *     tags:
+ *       - User Auth
+ *     summary: Logout user
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success
+ */
+router.post('/logout', protect, authController.logout);
 
 export default router;

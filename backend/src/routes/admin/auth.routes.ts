@@ -2,6 +2,7 @@ import { Router } from 'express';
 import * as authController from '../../controllers/admin/auth.controller';
 import { validate } from '../../middlewares/validate';
 import { loginSchema } from '../../utils/auth.schema';
+import { protect, restrictTo } from '../../middlewares/auth.middleware';
 
 const router = Router();
 
@@ -37,5 +38,35 @@ const router = Router();
  *         description: Access denied. Admin only.
  */
 router.post('/login', validate(loginSchema), authController.login);
+
+/**
+ * @openapi
+ * /admin/me:
+ *   get:
+ *     tags:
+ *       - Admin Auth
+ *     summary: Get current admin profile
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success
+ */
+router.get('/me', protect, restrictTo('ADMIN'), authController.getMe);
+
+/**
+ * @openapi
+ * /admin/logout:
+ *   post:
+ *     tags:
+ *       - Admin Auth
+ *     summary: Logout admin
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success
+ */
+router.post('/logout', protect, restrictTo('ADMIN'), authController.logout);
 
 export default router;

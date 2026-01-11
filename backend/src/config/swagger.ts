@@ -8,15 +8,24 @@ const options: Options = {
             version: '1.0.0',
             description: 'API Documentation for Nexus Ecommerce Backend',
             contact: {
-                name: 'Developer',
+                description: 'Nexus Ecommerce API with platform separation',
             },
         },
         servers: [
             {
-                url: 'http://localhost:5001',
+                url: `http://localhost:${process.env.PORT || 5001}`,
                 description: 'Development server',
             },
         ],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT',
+                },
+            },
+        },
     },
     apis: ['./src/routes/**/*.ts', './src/app.ts'], // Path to the API docs
 };
