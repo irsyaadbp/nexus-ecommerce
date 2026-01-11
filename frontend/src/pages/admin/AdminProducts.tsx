@@ -2,16 +2,16 @@ import { Button } from "@/components/ui/button";
 import type { Product } from "@/types";
 import { useMemo, useState } from "react";
 import { categories, products } from "@/mock/products";
-import { AlertTriangle, ArrowUpDown, Check, Edit, Filter, Plus, Search, Trash2, X } from "lucide-react";
+import { AlertTriangle, ArrowUpDown, Edit, Filter, Plus, Search, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { SortOption } from "@/types";
 import { formatPrice } from "@/lib/formatPrice";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { DataTable, type DataTableColumn } from "@/components/ui/DataTable";
+import { DialogProductMutation } from "@/components/admin/DialogProductMutation";
+import type { ProductFormData } from "@/schemas/product.schema";
 
 export default function AdminProducts() {
     const [productList, setProductList] = useState(products);
@@ -21,21 +21,8 @@ export default function AdminProducts() {
     const [categoryFilter, setCategoryFilter] = useState("all");
     const [sortBy, setSortBy] = useState<SortOption>("newest");
     const [deletePopoverOpen, setDeletePopoverOpen] = useState<number | null>(null);
-    const [savePopoverOpen, setSavePopoverOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 4;
-    const [formData, setFormData] = useState({
-        name: "",
-        category: "",
-        price: "",
-        originalPrice: "",
-        description: "",
-        image: ""
-    });
-
-    const [sizes, setSizes] = useState<string[]>([]);
-    const [newSize, setNewSize] = useState("");
-
 
     // Filter and sort products
     const filteredProducts = useMemo(() => {
@@ -187,93 +174,47 @@ export default function AdminProducts() {
 
     const openAddModal = () => {
         setEditingProduct(null);
-        setFormData({
-            name: "",
-            category: "",
-            price: "",
-            originalPrice: "",
-            description: "",
-            image: ""
-        });
-        setSizes([]);
-        setNewSize("");
         setShowModal(true);
     };
 
     const openEditModal = (product: Product) => {
         setEditingProduct(product);
-        setFormData({
-            name: product.name,
-            category: product.category,
-            price: product.price.toString(),
-            originalPrice: product.originalPrice?.toString() || "",
-            description: product.description,
-            image: product.image
-        });
-        setSizes(product.variants || []);
-        setNewSize("");
         setShowModal(true);
     };
 
-    const addSize = () => {
-        if (newSize.trim() && !sizes.includes(newSize.trim())) {
-            setSizes([...sizes, newSize.trim()]);
-            setNewSize("");
-        }
-    };
-
-    const removeSize = (index: number) => {
-        setSizes(sizes.filter((_, i) => i !== index));
-    };
-
-    const handleSizeKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === "Enter") {
-            e.preventDefault();
-            addSize();
-        }
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        setSavePopoverOpen(true);
-    };
-
-    const confirmSave = () => {
-        const productSizes = sizes.length > 0 ? sizes : undefined;
-
+    const handleMutationSubmit = (data: ProductFormData) => {
         if (editingProduct) {
             setProductList(prev => prev.map(p =>
                 p.id === editingProduct.id
                     ? {
                         ...p,
-                        name: formData.name,
-                        category: formData.category,
-                        price: Number(formData.price),
-                        originalPrice: formData.originalPrice ? Number(formData.originalPrice) : undefined,
-                        description: formData.description,
-                        image: formData.image,
-                        variants: productSizes
+                        name: data.name,
+                        category: data.category,
+                        price: data.price,
+                        originalPrice: data.originalPrice ? Number(data.originalPrice) : undefined,
+                        description: data.description,
+                        image: data.image,
+                        variants: data.variants
                     }
                     : p
             ));
         } else {
             const newProduct: Product = {
                 id: Date.now(),
-                name: formData.name,
-                category: formData.category,
-                price: Number(formData.price),
-                originalPrice: formData.originalPrice ? Number(formData.originalPrice) : undefined,
-                description: formData.description,
-                image: formData.image || "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80",
+                name: data.name,
+                category: data.category,
+                price: data.price,
+                originalPrice: data.originalPrice ? Number(data.originalPrice) : undefined,
+                description: data.description,
+                image: data.image || "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80",
                 rating: 5.0,
                 reviews: 0,
                 isNew: true,
-                variants: productSizes
+                variants: data.variants,
+                slug: data.name.toLowerCase().replace(/ /g, "-")
             };
             setProductList(prev => [newProduct, ...prev]);
         }
-
-        setSavePopoverOpen(false);
         setShowModal(false);
     };
 
@@ -281,6 +222,7 @@ export default function AdminProducts() {
         setProductList(prev => prev.filter(p => p.id !== id));
         setDeletePopoverOpen(null);
     };
+
     return (
         <section className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -388,180 +330,12 @@ export default function AdminProducts() {
                 onChangePage={setCurrentPage}
             />
 
-            <Dialog open={showModal} onOpenChange={setShowModal}>
-                <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-                    <DialogHeader>
-                        <DialogTitle>
-                            {editingProduct ? "Edit Produk" : "Tambah Produk Baru"}
-                        </DialogTitle>
-                    </DialogHeader>
-
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="form-group">
-                            <label className="form-label">Nama Produk</label>
-                            <Input
-                                type="text"
-                                value={formData.name}
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                placeholder="Masukkan nama produk"
-                                required
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label className="form-label">Kategori</label>
-                            <Select>
-                                <SelectTrigger className="!h-12 w-full">
-                                    <SelectValue placeholder="Select a fruit" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectLabel>Pilih kategori</SelectLabel>
-                                        <SelectItem value="Furniture">Furniture</SelectItem>
-                                        <SelectItem value="Lighting">Lighting</SelectItem>
-                                        <SelectItem value="Dekorasi">Dekorasi</SelectItem>
-                                        <SelectItem value="Storage">Storage</SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="form-group">
-                                <label className="form-label">Harga</label>
-                                <Input
-                                    type="number"
-                                    value={formData.price}
-                                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                                    placeholder="0"
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label">Harga Asli (Opsional)</label>
-                                <Input
-                                    type="number"
-                                    value={formData.originalPrice}
-                                    onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })}
-                                    placeholder="0"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="form-group">
-                            <label className="form-label">URL Gambar</label>
-                            <Input
-                                type="url"
-                                value={formData.image}
-                                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                                placeholder="https://..."
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label className="form-label">Ukuran / Variant</label>
-                            <div className="flex gap-2 mb-2">
-                                <Input
-                                    type="text"
-                                    value={newSize}
-                                    onChange={(e) => setNewSize(e.target.value)}
-                                    onKeyDown={handleSizeKeyDown}
-                                    className="flex-1"
-                                    placeholder="Ketik ukuran lalu tekan Enter atau +"
-                                />
-                                <Button
-                                    type="button"
-                                    variant="secondary"
-                                    size="icon-lg"
-                                    onClick={addSize}
-                                >
-                                    <Plus className="h-4 w-4" />
-                                </Button>
-                            </div>
-                            {sizes.length > 0 && (
-                                <div className="flex flex-wrap gap-2">
-                                    {sizes.map((size, index) => (
-                                        <span
-                                            key={index}
-                                            className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/20 text-primary text-sm"
-                                        >
-                                            {size}
-                                            <button
-                                                type="button"
-                                                onClick={() => removeSize(index)}
-                                                className="hover:text-destructive transition-colors"
-                                            >
-                                                <X className="h-3 w-3" />
-                                            </button>
-                                        </span>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="form-group">
-                            <label className="form-label">Deskripsi</label>
-                            <Textarea
-                                value={formData.description}
-                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                placeholder="Masukkan deskripsi produk"
-                                required
-                                rows={10}
-                            />
-                        </div>
-
-                        <div className="flex gap-3 pt-4">
-                            <Button type="button" variant="outline" className="flex-1" onClick={() => setShowModal(false)}>
-                                Batal
-                            </Button>
-                            <Popover open={savePopoverOpen} onOpenChange={setSavePopoverOpen}>
-                                <PopoverTrigger asChild>
-                                    <Button type="submit" className="flex-1">
-                                        {editingProduct ? "Simpan Perubahan" : "Tambah Produk"}
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-72" align="end">
-                                    <div className="flex flex-col gap-3">
-                                        <div className="flex items-start gap-3">
-                                            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                                                <Check className="h-5 w-5 text-primary" />
-                                            </div>
-                                            <div>
-                                                <h4 className="font-semibold text-foreground">
-                                                    {editingProduct ? "Simpan Perubahan?" : "Tambah Produk?"}
-                                                </h4>
-                                                <p className="text-sm text-muted-foreground">
-                                                    {editingProduct
-                                                        ? "Perubahan akan disimpan ke produk ini."
-                                                        : "Produk baru akan ditambahkan ke daftar."
-                                                    }
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                className="flex-1"
-                                                onClick={() => setSavePopoverOpen(false)}
-                                            >
-                                                Batal
-                                            </Button>
-                                            <Button
-                                                size="sm"
-                                                className="flex-1"
-                                                onClick={confirmSave}
-                                            >
-                                                Ya, Lanjutkan
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </PopoverContent>
-                            </Popover>
-                        </div>
-                    </form>
-                </DialogContent>
-            </Dialog>
+            <DialogProductMutation
+                open={showModal}
+                onOpenChange={setShowModal}
+                editingProduct={editingProduct}
+                onSubmit={handleMutationSubmit}
+            />
         </section>
     );
 }
