@@ -1,12 +1,24 @@
 import { Link, useLocation } from "react-router";
-import { ShoppingBag, Heart, Menu, X } from "lucide-react";
+import { ShoppingBag, Heart, Menu, X, User, UserIcon, SettingsIcon, CreditCardIcon, BellIcon, LogOutIcon, LayoutDashboard, ListOrdered, ShoppingBasket } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./Logo";
+import { useAuth } from "@/hooks/useAuth";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router";
 
 export function Navbar() {
     const location = useLocation();
+    const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { user, isAuthenticated, logout } = useAuth();
 
     const navLinks = [
         { name: "Beranda", path: "/" },
@@ -14,6 +26,39 @@ export function Navbar() {
         { name: "Tentang", path: "/about" },
         { name: "Kontak", path: "/contact" }
     ];
+
+    const listItems = [
+        {
+            icon: UserIcon,
+            property: 'Profile',
+            admin: false,
+            onClick: () => navigate('/profile')
+        },
+        {
+            icon: ShoppingBasket,
+            property: 'My Orders',
+            admin: false,
+            onClick: () => navigate('/orders')
+        },
+        {
+            icon: LayoutDashboard,
+            property: 'Go to Dashboard',
+            admin: true,
+            onClick: () => navigate('/admin')
+        },
+        {
+            icon: SettingsIcon,
+            property: 'Settings',
+            admin: false,
+            onClick: () => navigate('/settings')
+        },
+        {
+            icon: LogOutIcon,
+            property: 'Sign Out',
+            admin: false,
+            onClick: () => logout.mutate()
+        }
+    ].filter(item => !item.admin || user?.role === 'ADMIN');
 
     const isActive = (path: string) => location.pathname === path;
 
@@ -40,13 +85,37 @@ export function Navbar() {
                     </Button>
                     <Button size="icon" variant={'secondary'} aria-label="Cart">
                         <ShoppingBag className="h-5 w-5" />
-
                     </Button>
-                    <Link to="/login">
-                        <Button className="hidden lg:block">
-                            Login/Register
-                        </Button>
-                    </Link>
+                    {isAuthenticated ? (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant='secondary' size='icon' className='overflow-hidden rounded-full'>
+                                    <img src='https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-5.png' alt={user?.username} />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className='w-56' align="end">
+                                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                                <DropdownMenuGroup>
+                                    {listItems.map((item, index) => (
+                                        <DropdownMenuItem
+                                            key={index}
+                                            className="hover:!bg-secondary cursor-pointer flex items-center gap-2"
+                                            onClick={item.onClick}
+                                        >
+                                            <item.icon className="h-4 w-4" />
+                                            <span className='text-popover-foreground'>{item.property}</span>
+                                        </DropdownMenuItem>
+                                    ))}
+                                </DropdownMenuGroup>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    ) : (
+                        <Link to="/login">
+                            <Button className="hidden lg:block">
+                                Login/Register
+                            </Button>
+                        </Link>
+                    )}
                     <Button
                         size="icon"
                         variant={'ghost'}
@@ -74,11 +143,35 @@ export function Navbar() {
                                 {link.name}
                             </Link>
                         ))}
-                        <Link to="/login" className="w-full">
-                            <Button className="mt-6 w-full">
-                                Login/Register
-                            </Button>
-                        </Link>
+                        {isAuthenticated ? (
+                            <>
+                                {user?.role === 'ADMIN' && (
+                                    <Link
+                                        to="/admin"
+                                        className="py-3 text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        Dashboard
+                                    </Link>
+                                )}
+                                <Button
+                                    variant="outline"
+                                    className="mt-6 w-full text-destructive border-destructive hover:bg-destructive/10"
+                                    onClick={() => {
+                                        logout.mutate();
+                                        setIsMenuOpen(false);
+                                    }}
+                                >
+                                    Logout
+                                </Button>
+                            </>
+                        ) : (
+                            <Link to="/login" className="w-full" onClick={() => setIsMenuOpen(false)}>
+                                <Button className="mt-6 w-full">
+                                    Login/Register
+                                </Button>
+                            </Link>
+                        )}
                     </nav>
                 </div>
             )}

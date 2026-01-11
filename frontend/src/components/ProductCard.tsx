@@ -113,7 +113,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                         </div>
 
                         {/* Price */}
-                        <div className="flex items-center gap-2 pt-1">
+                        <div className="flex flex-col md:flex-row md:items-center md:gap-2 pt-1">
                             <span className="text-lg font-bold text-primary">
                                 {formatPrice(product.price)}
                             </span>

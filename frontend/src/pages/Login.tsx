@@ -1,10 +1,24 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "../components/ui/button";
-import { Link } from "react-router";
+import { Link, Navigate } from "react-router";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Login() {
+    const { isAuthenticated, isLoading } = useAuth();
+
+    if (isLoading) {
+        return (
+            <div className="min-h-svh flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
+        );
+    }
+
+    if (isAuthenticated) {
+        return <Navigate to="/" replace />;
+    }
     return (
-        <div className="min-h-[calc(100svh-64px-600px)] flex items-center justify-center bg-background p-4">
+        <div className="min-h-[calc(100vh-64px-600px)] flex flex-col items-center justify-center bg-background p-4">
             <div className="w-full max-w-md space-y-8 glass-card p-8">
                 <div className="text-center">
                     <h1 className="text-3xl font-bold">Welcome Back</h1>
@@ -36,6 +50,12 @@ export default function Login() {
                     </Link>
                 </p>
             </div>
+            <p className="text-center text-sm text-muted-foreground mt-6">
+                Are you an admin?{" "}
+                <Link to="/admin/login" className="text-primary hover:underline">
+                    Login here
+                </Link>
+            </p>
         </div>
     );
 }

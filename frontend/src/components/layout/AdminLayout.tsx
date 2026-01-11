@@ -33,7 +33,7 @@ export function AdminLayout() {
 
             {/* Sidebar - Always visible on desktop */}
             <aside
-                className={`fixed left-0 top-0 z-50 h-screen border-r border-border/50 bg-secondary/50 transition-all duration-300
+                className={`fixed left-0 top-0 z-50 h-screen border-r border-border/50 bg-secondary md:bg-secondary-50 transition-all duration-300
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"} 
           lg:translate-x-0
           ${sidebarCollapsed ? "lg:w-20" : "lg:w-64"}

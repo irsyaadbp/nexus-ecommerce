@@ -11,6 +11,7 @@ import DefaultLayout from "./components/layout/DefaultLayout";
 import { AdminLayout } from "./components/layout/AdminLayout";
 import { AdminNotfound } from "./pages/admin/AdminNotfound";
 import { NotFound } from "./pages/NotFound";
+import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 
 const router = createBrowserRouter([
     {
@@ -45,20 +46,26 @@ const router = createBrowserRouter([
     },
     {
         path: "/admin",
-        element: <AdminLayout />,
+        element: <ProtectedRoute />,
         children: [
             {
-                index: true,
-                element: <Dashboard />,
+                path: "",
+                element: <AdminLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <Dashboard />,
+                    },
+                    {
+                        path: "products",
+                        element: <AdminProducts />,
+                    },
+                    {
+                        path: "*",
+                        element: <AdminNotfound />,
+                    }
+                ],
             },
-            {
-                path: "products",
-                element: <AdminProducts />,
-            },
-            {
-                path: "*",
-                element: <AdminNotfound />,
-            }
         ],
     },
     {

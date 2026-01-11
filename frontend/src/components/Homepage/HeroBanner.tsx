@@ -42,7 +42,7 @@ export function HeroBanner() {
 
     return (
         <section className="relative overflow-hidden">
-            <div className="relative h-[300px] md:h-[400px] lg:h-[500px]">
+            <div className="relative h-[500px]">
                 <AnimatePresence mode="wait">
                     {banners.map((banner, index) => (
                         index === currentBanner && (
@@ -60,7 +60,7 @@ export function HeroBanner() {
                                     className="w-full h-full object-cover"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
-                                <div className="absolute inset-0 flex items-center">
+                                <div className="absolute inset-0 flex items-center mt-20">
                                     <div className="container-main">
                                         <motion.div
                                             className="max-w-lg space-y-4"
@@ -77,7 +77,7 @@ export function HeroBanner() {
                                                 animate={{ y: 0, opacity: 1 }}
                                                 transition={{ delay: 0.5, duration: 0.5 }}
                                             >
-                                                <Link to="/products" className="inline-flex mt-6">
+                                                <Link to="/products" className="inline-flex md:mt-6">
                                                     <Button>
                                                         {banner.cta}
                                                         <ArrowRight className="h-4 w-4" />

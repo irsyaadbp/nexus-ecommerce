@@ -1,8 +1,22 @@
-import { Link } from "react-router";
+import { Link, Navigate } from "react-router";
 import { Button } from "../components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Register() {
+    const { isAuthenticated, isLoading } = useAuth();
+
+    if (isLoading) {
+        return (
+            <div className="min-h-svh flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
+        );
+    }
+
+    if (isAuthenticated) {
+        return <Navigate to="/" replace />;
+    }
     return (
         <div className="min-h-[calc(100svh-64px-600px)] flex items-center justify-center bg-background p-4">
             <div className="w-full max-w-md space-y-8 glass-card p-8">
