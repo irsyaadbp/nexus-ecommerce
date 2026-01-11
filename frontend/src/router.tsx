@@ -9,6 +9,8 @@ import AdminLogin from "./pages/admin/AdminLogin";
 import AdminProducts from "./pages/admin/AdminProducts";
 import DefaultLayout from "./components/layout/DefaultLayout";
 import { AdminLayout } from "./components/layout/AdminLayout";
+import { AdminNotfound } from "./pages/admin/AdminNotfound";
+import { NotFound } from "./pages/NotFound";
 
 const router = createBrowserRouter([
     {
@@ -35,6 +37,10 @@ const router = createBrowserRouter([
                 path: "/register",
                 element: <Register />,
             },
+            {
+                path: "*",
+                element: <NotFound />,
+            }
         ]
     },
     {
@@ -53,8 +59,16 @@ const router = createBrowserRouter([
                 path: "products",
                 element: <AdminProducts />,
             },
+            {
+                path: "*",
+                element: <AdminNotfound />,
+            }
         ],
     },
+    {
+        path: "*",
+        element: <NotFound />,
+    }
 ]);
 
 export default router;
