@@ -9,6 +9,7 @@ dotenv.config();
 const productData = [
     {
         name: "Kursi Kayu Minimalis",
+        slug: "kursi-kayu-minimalis",
         category: "Furniture",
         price: 1250000,
         originalPrice: 1500000,
@@ -23,6 +24,7 @@ const productData = [
     },
     {
         name: "Lampu Meja Nordic",
+        slug: "lampu-meja-nordic",
         category: "Lighting",
         price: 450000,
         images: [
@@ -35,6 +37,7 @@ const productData = [
     },
     {
         name: "Vas Keramik Artisan",
+        slug: "vas-keramik-artisan",
         category: "Dekorasi",
         price: 275000,
         images: [
@@ -47,6 +50,7 @@ const productData = [
     },
     {
         name: "Sofa 3 Seater Premium",
+        slug: "sofa-3-seater-premium",
         category: "Furniture",
         price: 8500000,
         originalPrice: 9500000,
@@ -61,6 +65,7 @@ const productData = [
     },
     {
         name: "Meja Kopi Marmer",
+        slug: "meja-kopi-marmer",
         category: "Furniture",
         price: 2750000,
         images: [
@@ -72,6 +77,7 @@ const productData = [
     },
     {
         name: "Rak Buku Modular",
+        slug: "rak-buku-modular",
         category: "Storage",
         price: 1850000,
         images: [
@@ -83,6 +89,7 @@ const productData = [
     },
     {
         name: "Karpet Tenun Tradisional",
+        slug: "karpet-tenun-tradisional",
         category: "Dekorasi",
         price: 950000,
         images: [
@@ -95,6 +102,7 @@ const productData = [
     },
     {
         name: "Cermin Dinding Rotan",
+        slug: "cermin-dinding-rotan",
         category: "Dekorasi",
         price: 525000,
         images: [

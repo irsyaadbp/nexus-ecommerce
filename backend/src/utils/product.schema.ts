@@ -10,6 +10,7 @@ export const createProductSchema = z.object({
         rating: z.number().min(0).max(5).default(0),
         reviews: z.number().min(0).default(0),
         description: z.string().min(1, 'Description is required'),
+        slug: z.string().optional(),
         variants: z.array(z.object({ name: z.string().min(1) })).optional(),
     }),
 });
@@ -27,6 +28,7 @@ export const updateProductSchema = z.object({
         rating: z.number().min(0).max(5).optional(),
         reviews: z.number().min(0).optional(),
         description: z.string().optional(),
+        slug: z.string().optional(),
         variants: z.array(z.object({ name: z.string().min(1) })).optional(),
     }),
 });

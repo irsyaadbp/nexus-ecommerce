@@ -58,14 +58,14 @@ router.get('/categories', productController.getCategories);
 
 /**
  * @openapi
- * /user/products/{id}:
+ * /user/products/{slug}:
  *   get:
  *     tags:
  *       - User Product
- *     summary: Get product details
+ *     summary: Get product details by slug
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: slug
  *         required: true
  *         schema:
  *           type: string
@@ -73,6 +73,6 @@ router.get('/categories', productController.getCategories);
  *       200:
  *         description: Success
  */
-router.get('/:id', productController.getProductById);
+router.get('/:slug', productController.getProductBySlug);
 
 export default router;

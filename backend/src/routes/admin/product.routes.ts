@@ -71,14 +71,14 @@ router.post('/', validate(createProductSchema), productController.createProduct)
 
 /**
  * @openapi
- * /admin/products/{id}:
+ * /admin/products/{slug}:
  *   get:
  *     tags:
  *       - Admin Product
- *     summary: Get product by ID
+ *     summary: Get product by slug
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: slug
  *         required: true
  *         schema:
  *           type: string
@@ -86,7 +86,7 @@ router.post('/', validate(createProductSchema), productController.createProduct)
  *       200:
  *         description: Success
  */
-router.get('/:id', productController.getProductById);
+router.get('/:slug', productController.getProductBySlug);
 
 /**
  * @openapi

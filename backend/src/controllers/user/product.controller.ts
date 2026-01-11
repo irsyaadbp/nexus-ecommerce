@@ -56,3 +56,15 @@ export const getProductById = async (req: Request, res: Response) => {
         return errorResponse(res, 'Failed to retrieve product', error.message, 500);
     }
 };
+
+export const getProductBySlug = async (req: Request, res: Response) => {
+    try {
+        const product = await Product.findOne({ slug: req.params.slug });
+        if (!product) {
+            return errorResponse(res, 'Product not found', null, 404);
+        }
+        return successResponse(res, 'Product retrieved successfully', product);
+    } catch (error: any) {
+        return errorResponse(res, 'Failed to retrieve product', error.message, 500);
+    }
+};

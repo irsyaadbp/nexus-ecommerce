@@ -9,6 +9,7 @@ export interface IProduct extends Document {
     rating: number;
     reviews: number;
     description: string;
+    slug: string;
     variants?: { name: string }[];
 }
 
@@ -48,6 +49,13 @@ const productSchema: Schema = new Schema(
             type: String,
             required: true,
         },
+        slug: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true,
+            index: true,
+        },
         variants: {
             type: [
                 {
@@ -61,6 +69,28 @@ const productSchema: Schema = new Schema(
         timestamps: true,
     }
 );
+
+productSchema.pre<IProduct>('save', async function () {
+    if (!this.isModified('name') && this.slug) {
+        return;
+    }
+
+    let baseSlug = this.name
+        .toLowerCase()
+        .replace(/[^\w ]+/g, '')
+        .replace(/ +/g, '-');
+
+    if (!this.slug || this.isModified('name')) {
+        let slug = baseSlug;
+        const ProductModel = mongoose.model<IProduct>('Product');
+        let exists = await ProductModel.findOne({ slug, _id: { $ne: this._id } });
+
+        if (exists) {
+            slug = `${baseSlug}-${Date.now()}`;
+        }
+        this.slug = slug;
+    }
+});
 
 const Product = mongoose.model<IProduct>('Product', productSchema);
 
