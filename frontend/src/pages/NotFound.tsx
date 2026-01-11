@@ -2,7 +2,6 @@ import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Home } from "lucide-react";
 import { Link } from "react-router";
-import { LayoutDashboard } from "lucide-react";
 
 export function NotFound() {
     return <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">

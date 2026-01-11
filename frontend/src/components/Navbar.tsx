@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router";
-import { ShoppingBag, Heart, Menu, X, User, UserIcon, SettingsIcon, CreditCardIcon, BellIcon, LogOutIcon, LayoutDashboard, ListOrdered, ShoppingBasket } from "lucide-react";
+import { ShoppingBag, Heart, Menu, X, UserIcon, SettingsIcon, LogOutIcon, LayoutDashboard, ShoppingBasket } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./Logo";
