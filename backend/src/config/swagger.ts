@@ -13,12 +13,12 @@ const options: Options = {
         },
         servers: [
             {
-                url: 'http://localhost:5000',
+                url: 'http://localhost:5001',
                 description: 'Development server',
             },
         ],
     },
-    apis: ['./src/routes/*.ts', './src/app.ts'], // Path to the API docs
+    apis: ['./src/routes/**/*.ts', './src/app.ts'], // Path to the API docs
 };
 
 const swaggerSpec = swaggerJsdoc(options);
