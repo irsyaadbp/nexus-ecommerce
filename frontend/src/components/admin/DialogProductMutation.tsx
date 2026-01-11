@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { productSchema, type ProductFormData } from "@/schemas/product.schema";
 import type { Product } from "@/types";
-import { categories } from "@/mock/products";
+import { useProductCategories } from "@/hooks/useProducts";
 
 // API error format from backend
 export type ApiValidationErrors = Record<string, string[]>;
@@ -37,6 +37,9 @@ export function DialogProductMutation({
     const [variants, setVariants] = useState<string[]>([]);
     const [newImage, setNewImage] = useState("");
     const [images, setImages] = useState<string[]>([]);
+
+    const { data: categoriesData } = useProductCategories();
+    const categories = categoriesData?.data || [];
 
     const {
         register,
@@ -198,8 +201,8 @@ export function DialogProductMutation({
                                 <SelectGroup>
                                     <SelectLabel>Kategori</SelectLabel>
                                     {categories.map((cat) => (
-                                        <SelectItem key={cat.slug} value={cat.slug}>
-                                            {cat.name}
+                                        <SelectItem key={cat} value={cat}>
+                                            {cat}
                                         </SelectItem>
                                     ))}
                                 </SelectGroup>
