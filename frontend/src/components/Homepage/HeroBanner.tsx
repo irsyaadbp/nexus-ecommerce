@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
+import { Link } from "react-router";
 
 const banners = [
     {
@@ -76,12 +77,12 @@ export function HeroBanner() {
                                                 animate={{ y: 0, opacity: 1 }}
                                                 transition={{ delay: 0.5, duration: 0.5 }}
                                             >
-                                                <a href="/products" className="inline-flex">
+                                                <Link to="/products" className="inline-flex mt-6">
                                                     <Button>
                                                         {banner.cta}
                                                         <ArrowRight className="h-4 w-4" />
                                                     </Button>
-                                                </a>
+                                                </Link>
                                             </motion.div>
                                         </motion.div>
                                     </div>

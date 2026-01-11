@@ -52,10 +52,6 @@ const router = createBrowserRouter([
                 element: <Dashboard />,
             },
             {
-                path: "login",
-                element: <AdminLogin />,
-            },
-            {
                 path: "products",
                 element: <AdminProducts />,
             },
@@ -64,6 +60,10 @@ const router = createBrowserRouter([
                 element: <AdminNotfound />,
             }
         ],
+    },
+    {
+        path: "admin/login",
+        element: <AdminLogin />,
     },
     {
         path: "*",

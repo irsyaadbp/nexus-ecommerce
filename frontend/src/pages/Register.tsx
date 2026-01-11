@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 
 export default function Register() {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-background p-4">
+        <div className="min-h-[calc(100svh-64px-600px)] flex items-center justify-center bg-background p-4">
             <div className="w-full max-w-md space-y-8 glass-card p-8">
                 <div className="text-center">
                     <h1 className="text-3xl font-bold">Create Account</h1>
