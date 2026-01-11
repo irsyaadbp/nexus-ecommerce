@@ -149,7 +149,7 @@
   --accent-foreground: oklch(0.05 0 0);
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.20 0 0);
+  --border: hsl(0 0% 20%);
   --input: oklch(0.20 0 0);
   --ring: oklch(0.86 0.20 135);
   --sidebar: oklch(0.08 0 0);
@@ -194,12 +194,11 @@
 
 /* Navigation Classes */
 .nav-header {
+  @apply bg-background/60 border border-border/50;
   position: sticky;
   top: 0;
   z-index: 50;
   width: 100%;
-  border-bottom: 1px solid hsl(var(--border) / 0.5);
-  background-color: hsl(var(--background) / 0.8);
   backdrop-filter: blur(24px);
 }
 
@@ -877,6 +876,26 @@
   ring: 2px solid hsl(var(--primary));
 }
 
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background-color: var(--secondary);
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--foreground);
+  transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+  background-color: var(--secondary);
+  border-color: var(--primary);
+}
+
 /* Footer Classes */
 .footer-wrapper {
   border-top: 1px solid hsl(var(--border) / 0.5);
@@ -1028,23 +1047,23 @@
   padding: 0.625rem 0.75rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
   transition: all 0.2s;
 }
 
 .admin-sidebar-link:hover {
-  background-color: hsl(var(--secondary));
-  color: hsl(var(--foreground));
+  background-color: var(--secondary);
+  color: var(--foreground);
 }
 
 .admin-sidebar-link-active {
-  background-color: hsl(var(--primary) / 0.1);
-  color: hsl(var(--primary));
+  background-color: var(--primary) / 0.1;
+  color: var(--primary);
 }
 
 .admin-sidebar-link-active:hover {
-  background-color: hsl(var(--primary) / 0.2);
-  color: hsl(var(--primary));
+  background-color: var(--primary) / 0.2;
+  color: var(--primary);
 }
 
 .admin-main {
@@ -1065,8 +1084,8 @@
   height: 4rem;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid hsl(var(--border) / 0.5);
-  background-color: hsl(var(--background) / 0.8);
+  border-bottom: 1px solid var(--border) / 0.5;
+  background-color: var(--background) / 0.8;
   backdrop-filter: blur(24px);
   padding-left: 1rem;
   padding-right: 1rem;
@@ -1091,9 +1110,9 @@
 
 /* Stats Card */
 .stats-card {
-  background-color: hsl(var(--card) / 0.6);
+  background-color: var(--card) / 0.6;
   backdrop-filter: blur(24px);
-  border: 1px solid hsl(var(--border) / 0.5);
+  border: 1px solid var(--border) / 0.5;
   border-radius: 1rem;
   padding: 1.5rem;
   display: flex;
@@ -1104,13 +1123,13 @@
 .stats-card-title {
   font-size: 0.875rem;
   font-weight: 500;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
 }
 
 .stats-card-value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 
 .stats-card-change {
@@ -1119,18 +1138,18 @@
 }
 
 .stats-card-change-positive {
-  color: hsl(var(--primary));
+  color: var(--primary);
 }
 
 .stats-card-change-negative {
-  color: hsl(var(--destructive));
+  color: var(--destructive);
 }
 
 /* Data Table */
 .data-table-wrapper {
-  background-color: hsl(var(--card) / 0.6);
+  background-color: var(--card) / 0.6;
   backdrop-filter: blur(24px);
-  border: 1px solid hsl(var(--border) / 0.5);
+  border: 1px solid var(--border) / 0.5;
   border-radius: 1rem;
   overflow: hidden;
 }
@@ -1141,29 +1160,29 @@
 }
 
 .data-table-header {
-  border-bottom: 1px solid hsl(var(--border) / 0.5);
-  background-color: hsl(var(--secondary) / 0.3);
+  border-bottom: 1px solid var(--border) / 0.5;
+  background-color: var(--secondary) / 0.3;
 }
 
 .data-table-header-cell {
   padding: 0.75rem 1rem;
   text-align: left;
   font-weight: 600;
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
 }
 
 .data-table-row {
-  border-bottom: 1px solid hsl(var(--border) / 0.3);
+  border-bottom: 1px solid var(--border) / 0.3;
   transition: background-color 0.2s;
 }
 
 .data-table-row:hover {
-  background-color: hsl(var(--secondary) / 0.2);
+  background-color: var(--secondary) / 0.2;
 }
 
 .data-table-cell {
   padding: 0.75rem 1rem;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 
 /* Form Classes */
@@ -1176,38 +1195,38 @@
 .form-label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
 }
 
 .form-input {
   width: 100%;
   border-radius: 0.75rem;
-  border: 1px solid hsl(var(--border));
-  background-color: hsl(var(--secondary) / 0.5);
+  border: 1px solid var(--border);
+  background-color: var(--secondary) / 0.5;
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   outline: none;
   transition: all 0.2s;
 }
 
 .form-input::placeholder {
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
 }
 
 .form-input:focus {
-  border-color: hsl(var(--primary));
-  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary) / 0.2;
 }
 
 .form-textarea {
   width: 100%;
   border-radius: 0.75rem;
-  border: 1px solid hsl(var(--border));
-  background-color: hsl(var(--secondary) / 0.5);
+  border: 1px solid var(--border);
+  background-color: var(--secondary) / 0.5;
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   outline: none;
   transition: all 0.2s;
   min-height: 120px;
@@ -1215,22 +1234,22 @@
 }
 
 .form-textarea::placeholder {
-  color: hsl(var(--muted-foreground));
+  color: var(--muted-foreground);
 }
 
 .form-textarea:focus {
-  border-color: hsl(var(--primary));
-  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary) / 0.2;
 }
 
 .form-select {
   width: 100%;
   border-radius: 0.75rem;
-  border: 1px solid hsl(var(--border));
-  background-color: hsl(var(--secondary) / 0.5);
+  border: 1px solid var(--border);
+  background-color: var(--secondary) / 0.5;
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
-  color: hsl(var(--foreground));
+  color: var(--foreground);
   outline: none;
   transition: all 0.2s;
   appearance: none;
@@ -1238,8 +1257,8 @@
 }
 
 .form-select:focus {
-  border-color: hsl(var(--primary));
-  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary) / 0.2;
 }
 
 /* Badge Classes */
@@ -1260,9 +1279,9 @@
 }
 
 .bento-item {
-  background-color: hsl(var(--card) / 0.6);
+  background-color: var(--card) / 0.6;
   backdrop-filter: blur(24px);
-  border: 1px solid hsl(var(--border) / 0.5);
+  border: 1px solid var(--border) / 0.5;
   border-radius: 1rem;
   overflow: hidden;
   padding: 1.5rem;

@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "react-router";
 import { ProductCard } from "@/components/ProductCard";
 import { products } from "@/mock/products";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
     const saleProducts = products
@@ -49,6 +50,51 @@ export default function Home() {
                     </div>
                 </section>
             )}
+
+            <section className="py-8">
+                <div className="container-main">
+                    <motion.div
+                        className="flex items-center justify-between mb-6"
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className="h-8 w-1 bg-primary rounded-full" />
+                            <h2 className="text-xl font-bold text-foreground">Semua Produk</h2>
+                            <span className="text-sm text-muted-foreground">({products.length})</span>
+                        </div>
+                    </motion.div>
+
+                    {/* Products Grid */}
+                    <motion.div
+                        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                    >
+                        {products.map((product, index) => (
+                            <ProductCard key={product.id} product={product} index={index} />
+                        ))}
+                    </motion.div>
+
+                    {/* Load More */}
+                    <motion.div
+                        className="mt-8 text-center"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                    >
+                        <Link to="/products">
+                            <Button variant="secondary">
+                                Lihat Lebih Banyak
+                                <ArrowRight className="h-4 w-4" />
+                            </Button>
+                        </Link>
+                    </motion.div>
+                </div>
+            </section>
         </main>
     );
 }

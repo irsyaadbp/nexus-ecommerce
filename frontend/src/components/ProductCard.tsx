@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
-import { Heart, Star, ShoppingBag, Eye } from "lucide-react";
+import { Star, ShoppingBag } from "lucide-react";
 import { motion } from "motion/react";
 import { formatPrice } from "@/lib/formatPrice";
 import type { Product } from "@/types";

@@ -35,10 +35,10 @@ const Header = () => {
                 </nav>
 
                 <div className="nav-icons">
-                    <Button size="icon" variant={'ghost'} aria-label="Wishlist">
+                    <Button size="icon" variant={'secondary'} aria-label="Wishlist">
                         <Heart className="h-5 w-5" />
                     </Button>
-                    <Button size="icon" variant={'ghost'} aria-label="Cart">
+                    <Button size="icon" variant={'secondary'} aria-label="Cart">
                         <ShoppingBag className="h-5 w-5" />
 
                     </Button>
