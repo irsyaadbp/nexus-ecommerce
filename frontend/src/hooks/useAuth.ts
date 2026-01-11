@@ -24,6 +24,10 @@ export const useLoginUser = () => {
             toast.success("Logged in successfully");
             navigate('/');
         },
+        onError: (error: Error) => {
+            console.log(error)
+            toast.error(error.message || "Invalid credentials");
+        }
     });
 };
 

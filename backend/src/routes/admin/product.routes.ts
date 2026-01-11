@@ -3,7 +3,13 @@ import * as productController from '../../controllers/admin/product.controller';
 import { validate } from '../../middlewares/validate';
 import { createProductSchema, updateProductSchema, getProductsQuerySchema } from '../../utils/product.schema';
 
+import { protect, restrictTo } from '../../middlewares/auth.middleware';
+import { UserRole } from '../../models/user.model';
+
 const router = Router();
+
+// Protect all admin product routes
+router.use(protect, restrictTo(UserRole.ADMIN));
 
 /**
  * @openapi

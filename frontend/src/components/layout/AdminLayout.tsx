@@ -1,11 +1,13 @@
 import { ChevronLeft, LayoutDashboard, LogOut, Menu, Package, Settings, ShoppingCart, Store, Users, X } from "lucide-react";
 import { Link, Outlet, useLocation } from "react-router";
 import { useState } from "react";
+import { useAuthAdmin } from "@/hooks/useAuthAdmin";
 
 export function AdminLayout() {
     const location = useLocation();
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const { logout } = useAuthAdmin();
 
     const navItems = [
         { name: "Dashboard", path: "/admin", icon: LayoutDashboard },
@@ -108,6 +110,7 @@ export function AdminLayout() {
                 ${sidebarCollapsed ? "lg:justify-center lg:px-2" : ""}
               `}
                             title={sidebarCollapsed ? "Logout" : undefined}
+                            onClick={() => logout.mutate()}
                         >
                             <LogOut className="h-5 w-5 flex-shrink-0" />
                             <span className={sidebarCollapsed ? "lg:hidden" : ""}>Logout</span>

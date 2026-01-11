@@ -3,6 +3,7 @@ import * as authController from '../../controllers/admin/auth.controller';
 import { validate } from '../../middlewares/validate';
 import { loginSchema } from '../../utils/auth.schema';
 import { protect, restrictTo } from '../../middlewares/auth.middleware';
+import { UserRole } from '../../models/user.model';
 
 const router = Router();
 
@@ -52,7 +53,7 @@ router.post('/login', validate(loginSchema), authController.login);
  *       200:
  *         description: Success
  */
-router.get('/me', protect, restrictTo('ADMIN'), authController.getMe);
+router.get('/me', protect, restrictTo(UserRole.ADMIN), authController.getMe);
 
 /**
  * @openapi
@@ -67,6 +68,6 @@ router.get('/me', protect, restrictTo('ADMIN'), authController.getMe);
  *       200:
  *         description: Success
  */
-router.post('/logout', protect, restrictTo('ADMIN'), authController.logout);
+router.post('/logout', protect, restrictTo(UserRole.ADMIN), authController.logout);
 
 export default router;
