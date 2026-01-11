@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./Logo";
 
-const Header = () => {
+export function Navbar() {
     const location = useLocation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -86,4 +86,3 @@ const Header = () => {
     );
 };
 
-export default Header;

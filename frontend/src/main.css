@@ -1144,9 +1144,11 @@
 
 /* Stats Card */
 .stats-card {
-  background-color: var(--card) / 0.6;
+  /* background-color: var(--card) / 0.6; */
+  @apply bg-card;
   backdrop-filter: blur(24px);
-  border: 1px solid var(--border) / 0.5;
+  /* border: 1px solid var(--border) / 0.5; */
+  @apply border border-border/50;
   border-radius: 1rem;
   padding: 1.5rem;
   display: flex;
@@ -1181,9 +1183,9 @@
 
 /* Data Table */
 .data-table-wrapper {
-  background-color: var(--card) / 0.6;
+  @apply bg-card/60;
+  @apply border border-border/50;
   backdrop-filter: blur(24px);
-  border: 1px solid var(--border) / 0.5;
   border-radius: 1rem;
   overflow: hidden;
 }
@@ -1194,8 +1196,8 @@
 }
 
 .data-table-header {
-  border-bottom: 1px solid var(--border) / 0.5;
-  background-color: var(--secondary) / 0.3;
+  @apply border-b border-border/50;
+  @apply bg-secondary/30;
 }
 
 .data-table-header-cell {
@@ -1206,12 +1208,12 @@
 }
 
 .data-table-row {
-  border-bottom: 1px solid var(--border) / 0.3;
+  @apply border-b border-border/30;
   transition: background-color 0.2s;
 }
 
 .data-table-row:hover {
-  background-color: var(--secondary) / 0.2;
+  @apply bg-secondary/20;
 }
 
 .data-table-cell {

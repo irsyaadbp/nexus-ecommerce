@@ -7,7 +7,8 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/admin/Dashboard";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminProducts from "./pages/admin/AdminProducts";
-import DefaultLayout from "./components/DefaultLayout";
+import DefaultLayout from "./components/layout/DefaultLayout";
+import { AdminLayout } from "./components/layout/AdminLayout";
 
 const router = createBrowserRouter([
     {
@@ -38,6 +39,7 @@ const router = createBrowserRouter([
     },
     {
         path: "/admin",
+        element: <AdminLayout />,
         children: [
             {
                 index: true,
