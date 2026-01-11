@@ -14,7 +14,7 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-console.log(process.env.CORS_ORIGIN, 'ngihy')
+
 app.use(cors({
     origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : [],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
