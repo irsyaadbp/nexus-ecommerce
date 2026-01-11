@@ -9,7 +9,7 @@ import { formatPrice } from "@/lib/formatPrice";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
 import { DataTable, type DataTableColumn } from "@/components/ui/DataTable";
-import { DialogProductMutation } from "@/components/admin/DialogProductMutation";
+import { DialogProductMutation, type ApiValidationErrors } from "@/components/admin/DialogProductMutation";
 import type { ProductFormData } from "@/schemas/product.schema";
 import { useAdminProducts, useDeleteProduct, useCreateProduct, useUpdateProduct, useProductCategories } from "@/hooks/useProducts";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -22,7 +22,8 @@ export default function AdminProducts() {
     const [sortBy, setSortBy] = useState<SortOption>("newest");
     const [deletePopoverOpen, setDeletePopoverOpen] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 4;
+    const [apiErrors, setApiErrors] = useState<ApiValidationErrors | undefined>(undefined);
+    const itemsPerPage = 10;
 
     // Debounced search for API
     const debouncedSearch = useDebounce(searchQuery, 400);
@@ -193,19 +194,42 @@ export default function AdminProducts() {
     };
 
     const handleMutationSubmit = (data: ProductFormData) => {
+        // Transform variants from string[] to { name: string }[] for backend
+        const variantsPayload = data.variants?.map(v => ({ name: v })) || [];
+
         const payload = {
-            ...data,
-            images: data.image ? [data.image] : [],
+            name: data.name,
+            category: data.category,
+            price: Number(data.price),
+            description: data.description,
+            images: data.images,
             originalPrice: data.originalPrice ? Number(data.originalPrice) : undefined,
+            variants: variantsPayload.length > 0 ? variantsPayload : undefined,
         };
+
+        setApiErrors(undefined); // Clear previous errors
 
         if (editingProduct) {
             updateProduct.mutate({ id: editingProduct._id, data: payload }, {
-                onSuccess: () => setShowModal(false)
+                onSuccess: () => {
+                    setShowModal(false);
+                    setApiErrors(undefined);
+                },
+                onError: (error: unknown) => {
+                    const err = error as { error?: ApiValidationErrors };
+                    if (err.error) setApiErrors(err.error);
+                }
             });
         } else {
             createProduct.mutate(payload, {
-                onSuccess: () => setShowModal(false)
+                onSuccess: () => {
+                    setShowModal(false);
+                    setApiErrors(undefined);
+                },
+                onError: (error: unknown) => {
+                    const err = error as { error?: ApiValidationErrors };
+                    if (err.error) setApiErrors(err.error);
+                }
             });
         }
     };
@@ -325,9 +349,14 @@ export default function AdminProducts() {
 
             <DialogProductMutation
                 open={showModal}
-                onOpenChange={setShowModal}
+                onOpenChange={(open) => {
+                    setShowModal(open);
+                    if (!open) setApiErrors(undefined);
+                }}
                 editingProduct={editingProduct}
                 onSubmit={handleMutationSubmit}
+                apiErrors={apiErrors}
+                isPending={createProduct.isPending || updateProduct.isPending}
             />
         </section>
     );

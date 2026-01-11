@@ -1,6 +1,5 @@
 import { fetcher } from "@/lib/api";
 import type { Product } from "@/types";
-import type { ProductFormData } from "@/schemas/product.schema";
 
 export interface ProductsResponse {
     success: boolean;
@@ -25,8 +24,31 @@ export interface ProductResponse {
     data: Product;
 }
 
+// API Payload types matching backend schema
+export interface CreateProductPayload {
+    name: string;
+    category: string;
+    price: number;
+    description: string;
+    images: string[];
+    originalPrice?: number;
+    variants?: { name: string }[];
+    slug?: string;
+}
+
+export interface UpdateProductPayload {
+    name?: string;
+    category?: string;
+    price?: number;
+    description?: string;
+    images?: string[];
+    originalPrice?: number;
+    variants?: { name: string }[];
+    slug?: string;
+}
+
 export const productService = {
-    getAdminProducts: async (params: Record<string, any>) => {
+    getAdminProducts: async (params: Record<string, string>) => {
         return fetcher<ProductsResponse>("/admin/products", { params });
     },
 
@@ -34,14 +56,14 @@ export const productService = {
         return fetcher<CategoriesResponse>("/admin/products/categories");
     },
 
-    createProduct: async (data: ProductFormData) => {
+    createProduct: async (data: CreateProductPayload) => {
         return fetcher<ProductResponse>("/admin/products", {
             method: "POST",
             body: JSON.stringify(data),
         });
     },
 
-    updateProduct: async (id: string | number, data: Partial<ProductFormData>) => {
+    updateProduct: async (id: string | number, data: UpdateProductPayload) => {
         return fetcher<ProductResponse>(`/admin/products/${id}`, {
             method: "PUT",
             body: JSON.stringify(data),

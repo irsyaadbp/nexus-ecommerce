@@ -6,7 +6,7 @@ export const productSchema = z.object({
     price: z.coerce.number().min(0, "Price must be a positive number"),
     originalPrice: z.coerce.number().min(0, "Original price must be a positive number").optional().or(z.literal("")),
     description: z.string().min(1, "Description is required"),
-    image: z.string().url("Invalid image URL").or(z.literal("")),
+    images: z.array(z.string().url("Invalid image URL")).min(1, "At least one image is required"),
     variants: z.array(z.string()).optional(),
 });
 

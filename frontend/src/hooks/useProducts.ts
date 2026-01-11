@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { productService } from "@/services/product.service";
+import { productService, type CreateProductPayload, type UpdateProductPayload } from "@/services/product.service";
 import { toast } from "sonner";
-import type { ProductFormData } from "@/schemas/product.schema";
 
 export const useAdminProducts = (params: Record<string, string>) => {
     return useQuery({
@@ -20,7 +19,7 @@ export const useProductCategories = () => {
 export const useCreateProduct = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: productService.createProduct,
+        mutationFn: (data: CreateProductPayload) => productService.createProduct(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["admin-products"] });
             toast.success("Product created successfully");
@@ -34,7 +33,7 @@ export const useCreateProduct = () => {
 export const useUpdateProduct = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, data }: { id: string | number; data: Partial<ProductFormData> }) =>
+        mutationFn: ({ id, data }: { id: string | number; data: UpdateProductPayload }) =>
             productService.updateProduct(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["admin-products"] });

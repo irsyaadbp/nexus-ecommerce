@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, X, Check } from "lucide-react";
+import { Plus, X, Check, ImagePlus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -12,11 +12,16 @@ import { productSchema, type ProductFormData } from "@/schemas/product.schema";
 import type { Product } from "@/types";
 import { categories } from "@/mock/products";
 
+// API error format from backend
+export type ApiValidationErrors = Record<string, string[]>;
+
 interface DialogProductMutationProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     editingProduct: Product | null;
     onSubmit: (data: ProductFormData) => void;
+    apiErrors?: ApiValidationErrors;
+    isPending?: boolean;
 }
 
 export function DialogProductMutation({
@@ -24,10 +29,14 @@ export function DialogProductMutation({
     onOpenChange,
     editingProduct,
     onSubmit,
+    apiErrors,
+    isPending = false,
 }: DialogProductMutationProps) {
     const [savePopoverOpen, setSavePopoverOpen] = useState(false);
     const [newVariant, setNewVariant] = useState("");
     const [variants, setVariants] = useState<string[]>([]);
+    const [newImage, setNewImage] = useState("");
+    const [images, setImages] = useState<string[]>([]);
 
     const {
         register,
@@ -45,7 +54,7 @@ export function DialogProductMutation({
             price: 0,
             originalPrice: "",
             description: "",
-            image: "",
+            images: [],
             variants: [],
         },
     });
@@ -54,16 +63,18 @@ export function DialogProductMutation({
 
     useEffect(() => {
         if (editingProduct) {
+            const productImages = editingProduct.images || (editingProduct.image ? [editingProduct.image] : []);
             reset({
                 name: editingProduct.name,
                 category: editingProduct.category,
                 price: editingProduct.price,
                 originalPrice: editingProduct.originalPrice || "",
                 description: editingProduct.description,
-                image: editingProduct.image,
+                images: productImages,
                 variants: editingProduct.variants || [],
             });
             setVariants(editingProduct.variants || []);
+            setImages(productImages);
         } else {
             reset({
                 name: "",
@@ -71,10 +82,11 @@ export function DialogProductMutation({
                 price: 0,
                 originalPrice: "",
                 description: "",
-                image: "",
+                images: [],
                 variants: [],
             });
             setVariants([]);
+            setImages([]);
         }
     }, [editingProduct, reset]);
 
@@ -100,15 +112,52 @@ export function DialogProductMutation({
         }
     };
 
+    const addImage = () => {
+        if (newImage.trim() && !images.includes(newImage.trim())) {
+            try {
+                new URL(newImage.trim()); // Validate URL
+                const updatedImages = [...images, newImage.trim()];
+                setImages(updatedImages);
+                setValue("images", updatedImages);
+                setNewImage("");
+            } catch {
+                // Invalid URL, don't add
+            }
+        }
+    };
+
+    const removeImage = (index: number) => {
+        const updatedImages = images.filter((_, i) => i !== index);
+        setImages(updatedImages);
+        setValue("images", updatedImages);
+    };
+
+    const handleImageKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            addImage();
+        }
+    };
+
     const onFormSubmit = () => {
         setSavePopoverOpen(true);
     };
 
     const confirmSave = () => {
         const data = getValues();
-        onSubmit({ ...data, variants });
+        onSubmit({ ...data, variants, images });
         setSavePopoverOpen(false);
-        onOpenChange(false);
+    };
+
+    // Helper to get combined error message (form + API)
+    const getFieldError = (field: string) => {
+        const formError = errors[field as keyof typeof errors]?.message;
+        const apiError = apiErrors?.[field]?.[0];
+        return formError || apiError;
+    };
+
+    const hasFieldError = (field: string) => {
+        return !!(errors[field as keyof typeof errors] || apiErrors?.[field]);
     };
 
     return (
@@ -127,10 +176,10 @@ export function DialogProductMutation({
                             type="text"
                             placeholder="Masukkan nama produk"
                             {...register("name")}
-                            className={errors.name ? "border-destructive" : ""}
+                            className={hasFieldError("name") ? "border-destructive" : ""}
                         />
-                        {errors.name && (
-                            <p className="text-xs text-destructive mt-1">{errors.name.message}</p>
+                        {getFieldError("name") && (
+                            <p className="text-xs text-destructive mt-1">{getFieldError("name")}</p>
                         )}
                     </div>
 
@@ -140,7 +189,7 @@ export function DialogProductMutation({
                             value={categoryValue}
                             onValueChange={(val) => setValue("category", val, { shouldValidate: true })}
                         >
-                            <SelectTrigger className={`!h-12 w-full ${errors.category ? "border-destructive" : ""}`}>
+                            <SelectTrigger className={`!h-12 w-full ${hasFieldError("category") ? "border-destructive" : ""}`}>
                                 <SelectValue placeholder="Pilih kategori" />
                             </SelectTrigger>
                             <SelectContent>
@@ -154,8 +203,8 @@ export function DialogProductMutation({
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
-                        {errors.category && (
-                            <p className="text-xs text-destructive mt-1">{errors.category.message}</p>
+                        {getFieldError("category") && (
+                            <p className="text-xs text-destructive mt-1">{getFieldError("category")}</p>
                         )}
                     </div>
 
@@ -166,10 +215,10 @@ export function DialogProductMutation({
                                 type="number"
                                 placeholder="0"
                                 {...register("price")}
-                                className={errors.price ? "border-destructive" : ""}
+                                className={hasFieldError("price") ? "border-destructive" : ""}
                             />
-                            {errors.price && (
-                                <p className="text-xs text-destructive mt-1">{errors.price.message}</p>
+                            {getFieldError("price") && (
+                                <p className="text-xs text-destructive mt-1">{getFieldError("price")}</p>
                             )}
                         </div>
                         <div className="form-group">
@@ -178,24 +227,56 @@ export function DialogProductMutation({
                                 type="number"
                                 placeholder="0"
                                 {...register("originalPrice")}
-                                className={errors.originalPrice ? "border-destructive" : ""}
+                                className={hasFieldError("originalPrice") ? "border-destructive" : ""}
                             />
-                            {errors.originalPrice && (
-                                <p className="text-xs text-destructive mt-1">{errors.originalPrice.message}</p>
+                            {getFieldError("originalPrice") && (
+                                <p className="text-xs text-destructive mt-1">{getFieldError("originalPrice")}</p>
                             )}
                         </div>
                     </div>
 
                     <div className="form-group">
                         <label className="form-label">URL Gambar</label>
-                        <Input
-                            type="url"
-                            placeholder="https://..."
-                            {...register("image")}
-                            className={errors.image ? "border-destructive" : ""}
-                        />
-                        {errors.image && (
-                            <p className="text-xs text-destructive mt-1">{errors.image.message}</p>
+                        <div className="flex gap-2 mb-2">
+                            <Input
+                                type="url"
+                                value={newImage}
+                                onChange={(e) => setNewImage(e.target.value)}
+                                onKeyDown={handleImageKeyDown}
+                                className="flex-1"
+                                placeholder="https://... lalu tekan Enter atau +"
+                            />
+                            <Button
+                                type="button"
+                                variant="secondary"
+                                size="icon-lg"
+                                onClick={addImage}
+                            >
+                                <ImagePlus className="h-4 w-4" />
+                            </Button>
+                        </div>
+                        {images.length > 0 && (
+                            <div className="grid grid-cols-4 gap-2">
+                                {images.map((img, index) => (
+                                    <div key={index} className="relative group">
+                                        <img
+                                            src={img}
+                                            alt={`Product ${index + 1}`}
+                                            className="w-full h-16 object-cover rounded-lg border border-border"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => removeImage(index)}
+                                            className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                        >
+                                            <X className="h-3 w-3" />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        {getFieldError("images") && (
+                            <p className="text-xs text-destructive mt-1">{getFieldError("images")}</p>
                         )}
                     </div>
 
@@ -246,10 +327,10 @@ export function DialogProductMutation({
                             placeholder="Masukkan deskripsi produk"
                             rows={6}
                             {...register("description")}
-                            className={errors.description ? "border-destructive" : ""}
+                            className={hasFieldError("description") ? "border-destructive" : ""}
                         />
-                        {errors.description && (
-                            <p className="text-xs text-destructive mt-1">{errors.description.message}</p>
+                        {getFieldError("description") && (
+                            <p className="text-xs text-destructive mt-1">{getFieldError("description")}</p>
                         )}
                     </div>
 
@@ -259,13 +340,14 @@ export function DialogProductMutation({
                             variant="outline"
                             className="flex-1"
                             onClick={() => onOpenChange(false)}
+                            disabled={isPending}
                         >
                             Batal
                         </Button>
                         <Popover open={savePopoverOpen} onOpenChange={setSavePopoverOpen}>
                             <PopoverTrigger asChild>
-                                <Button type="submit" className="flex-1">
-                                    {editingProduct ? "Simpan Perubahan" : "Tambah Produk"}
+                                <Button type="submit" className="flex-1" disabled={isPending}>
+                                    {isPending ? "Menyimpan..." : (editingProduct ? "Simpan Perubahan" : "Tambah Produk")}
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-72" align="end">

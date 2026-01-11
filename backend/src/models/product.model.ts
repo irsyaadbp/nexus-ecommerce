@@ -51,8 +51,8 @@ const productSchema: Schema = new Schema(
         },
         slug: {
             type: String,
-            required: true,
             unique: true,
+            sparse: true,
             trim: true,
             index: true,
         },
