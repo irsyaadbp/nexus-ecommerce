@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router";
 import { ShoppingBag, Heart, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Logo } from "./Logo";
 
 const Header = () => {
     const location = useLocation();
@@ -19,9 +20,7 @@ const Header = () => {
     return (
         <header className="nav-header">
             <div className="nav-container">
-                <Link to="/" className="nav-logo">
-                    NEXUS<span className="text-primary">.</span>
-                </Link>
+                <Logo />
 
                 <nav className="nav-links">
                     {navLinks.map((link) => (

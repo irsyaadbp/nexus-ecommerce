@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { Instagram, Facebook, Twitter } from "lucide-react";
+import { Logo } from "./Logo";
 
 export function Footer() {
     return (
@@ -7,9 +8,7 @@ export function Footer() {
             <div className="footer-container">
                 <div className="footer-grid">
                     <div className="lg:col-span-2">
-                        <Link to="/" className="nav-logo mb-4 inline-block text-2xl">
-                            NEXUS<span className="text-primary">.</span>
-                        </Link>
+                        <Logo className="mb-4 inline-block text-2xl" />
                         <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
                             Premium furniture & home decor dengan desain modern dan kualitas terbaik untuk ruangan impian Anda.
                         </p>
