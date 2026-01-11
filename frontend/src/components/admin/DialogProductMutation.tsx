@@ -64,6 +64,8 @@ export function DialogProductMutation({
     useEffect(() => {
         if (editingProduct) {
             const productImages = editingProduct.images || (editingProduct.image ? [editingProduct.image] : []);
+            // Transform variants from { name: string }[] to string[]
+            const productVariants = editingProduct.variants?.map(v => v.name) || [];
             reset({
                 name: editingProduct.name,
                 category: editingProduct.category,
@@ -71,9 +73,9 @@ export function DialogProductMutation({
                 originalPrice: editingProduct.originalPrice || "",
                 description: editingProduct.description,
                 images: productImages,
-                variants: editingProduct.variants || [],
+                variants: productVariants,
             });
-            setVariants(editingProduct.variants || []);
+            setVariants(productVariants);
             setImages(productImages);
         } else {
             reset({

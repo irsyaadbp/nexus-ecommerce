@@ -160,19 +160,19 @@ export default function ProductDetail() {
                         {product.variants && (
                             <div className="product-detail-options">
                                 <span className="product-detail-option-label">
-                                    Variant: <strong className="text-primary">{product.variants[selectedSize]}</strong>
+                                    Variant: <strong className="text-primary">{product.variants[selectedSize]?.name}</strong>
                                 </span>
                                 <div className="product-detail-sizes">
                                     {product.variants.map((variant, index) => (
                                         <MotionButton
-                                            key={variant}
+                                            key={variant.name}
                                             onClick={() => setSelectedSize(index)}
                                             size={'sm'}
                                             variant={selectedSize === index ? 'default' : 'outline'}
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
                                         >
-                                            {variant}
+                                            {variant.name}
                                         </MotionButton>
                                     ))}
                                 </div>
