@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/types";
-import { useMemo, useState } from "react";
-import { categories, products } from "@/mock/products";
+import { useState } from "react";
 import { AlertTriangle, ArrowUpDown, Edit, Filter, Plus, Search, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -12,60 +11,70 @@ import { Badge } from "@/components/ui/badge";
 import { DataTable, type DataTableColumn } from "@/components/ui/DataTable";
 import { DialogProductMutation } from "@/components/admin/DialogProductMutation";
 import type { ProductFormData } from "@/schemas/product.schema";
+import { useAdminProducts, useDeleteProduct, useCreateProduct, useUpdateProduct, useProductCategories } from "@/hooks/useProducts";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function AdminProducts() {
-    const [productList, setProductList] = useState(products);
     const [showModal, setShowModal] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [categoryFilter, setCategoryFilter] = useState("all");
     const [sortBy, setSortBy] = useState<SortOption>("newest");
-    const [deletePopoverOpen, setDeletePopoverOpen] = useState<number | null>(null);
+    const [deletePopoverOpen, setDeletePopoverOpen] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 4;
 
-    // Filter and sort products
-    const filteredProducts = useMemo(() => {
-        let result = productList.filter(product =>
-            product.name.toLowerCase().includes(searchQuery.toLowerCase())
-        );
+    // Debounced search for API
+    const debouncedSearch = useDebounce(searchQuery, 400);
 
-        // Apply category filter
-        if (categoryFilter !== "all") {
-            result = result.filter(product => product.category === categoryFilter);
-        }
+    // API query params
+    const queryParams: Record<string, string> = {
+        page: currentPage.toString(),
+        limit: itemsPerPage.toString(),
+    };
+    if (debouncedSearch) queryParams.name = debouncedSearch;
+    if (categoryFilter !== "all") queryParams.category = categoryFilter;
 
-        // Apply sorting
-        switch (sortBy) {
-            case "name-asc":
-                result = [...result].sort((a, b) => a.name.localeCompare(b.name));
-                break;
-            case "name-desc":
-                result = [...result].sort((a, b) => b.name.localeCompare(a.name));
-                break;
-            case "price-asc":
-                result = [...result].sort((a, b) => a.price - b.price);
-                break;
-            case "price-desc":
-                result = [...result].sort((a, b) => b.price - a.price);
-                break;
-            case "rating-desc":
-                result = [...result].sort((a, b) => b.rating - a.rating);
-                break;
-            case "newest":
-            default:
-                result = [...result].sort((a, b) => b.id - a.id);
-                break;
-        }
+    // Add sorting params
+    switch (sortBy) {
+        case "name-asc":
+            queryParams.sortBy = "name";
+            queryParams.sortOrder = "asc";
+            break;
+        case "name-desc":
+            queryParams.sortBy = "name";
+            queryParams.sortOrder = "desc";
+            break;
+        case "price-asc":
+            queryParams.sortBy = "price";
+            queryParams.sortOrder = "asc";
+            break;
+        case "price-desc":
+            queryParams.sortBy = "price";
+            queryParams.sortOrder = "desc";
+            break;
+        case "rating-desc":
+            queryParams.sortBy = "rating";
+            queryParams.sortOrder = "desc";
+            break;
+        case "newest":
+        default:
+            queryParams.sortBy = "createdAt";
+            queryParams.sortOrder = "desc";
+            break;
+    }
 
-        return result;
-    }, [productList, searchQuery, categoryFilter, sortBy]);
+    // Hooks
+    const { data: productsData, isLoading } = useAdminProducts(queryParams);
+    const { data: categoriesData } = useProductCategories();
+    const deleteProduct = useDeleteProduct();
+    const createProduct = useCreateProduct();
+    const updateProduct = useUpdateProduct();
 
-    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-    const paginatedProducts = useMemo(() => {
-        const start = (currentPage - 1) * itemsPerPage;
-        return filteredProducts.slice(start, start + itemsPerPage);
-    }, [filteredProducts, currentPage, itemsPerPage]);
+    const products = productsData?.data?.products || [];
+    const totalPages = productsData?.data?.total_page || 1;
+    const totalData = productsData?.data?.total_data || 0;
+    const categories = categoriesData?.data || [];
 
     const columns: DataTableColumn<Product>[] = [
         {
@@ -74,13 +83,13 @@ export default function AdminProducts() {
             render: (value, product) => (
                 <div className="flex items-center gap-3">
                     <img
-                        src={product.image}
+                        src={product.images?.[0] || product.image}
                         alt={product.name}
                         className="h-12 w-12 rounded-lg object-cover"
                     />
                     <div>
                         <p className="font-medium text-foreground">{value}</p>
-                        <p className="text-xs text-muted-foreground">ID: {product.id}</p>
+                        <p className="text-xs text-muted-foreground">{product.slug}</p>
                     </div>
                 </div>
             )
@@ -121,14 +130,14 @@ export default function AdminProducts() {
                 <div className="flex items-center gap-2">
                     <button
                         onClick={() => openEditModal(product)}
-                        className="h-8 w-8 rounded-lg bg-secondary/50 flex items-center justify-center hover:bg-secondary transition-colors"
+                        className="cursor-pointer h-10 w-10 rounded-lg bg-secondary/50 flex items-center justify-center hover:bg-secondary transition-colors"
                     >
                         <Edit className="h-4 w-4" />
                     </button>
-                    <Popover open={deletePopoverOpen === product.id} onOpenChange={(open) => setDeletePopoverOpen(open ? product.id : null)}>
+                    <Popover open={deletePopoverOpen === product._id} onOpenChange={(open) => setDeletePopoverOpen(open ? product._id : null)}>
                         <PopoverTrigger asChild>
                             <button
-                                className="h-8 w-8 rounded-lg bg-destructive/10 flex items-center justify-center hover:bg-destructive/20 text-destructive transition-colors"
+                                className="cursor-pointer h-10 w-10 rounded-lg bg-destructive/10 flex items-center justify-center hover:bg-destructive/20 text-destructive transition-colors"
                             >
                                 <Trash2 className="h-4 w-4" />
                             </button>
@@ -159,9 +168,10 @@ export default function AdminProducts() {
                                         variant="destructive"
                                         size="sm"
                                         className="flex-1"
-                                        onClick={() => handleDelete(product.id)}
+                                        disabled={deleteProduct.isPending}
+                                        onClick={() => handleDelete(product._id)}
                                     >
-                                        Hapus
+                                        {deleteProduct.isPending ? "Menghapus..." : "Hapus"}
                                     </Button>
                                 </div>
                             </div>
@@ -183,44 +193,27 @@ export default function AdminProducts() {
     };
 
     const handleMutationSubmit = (data: ProductFormData) => {
+        const payload = {
+            ...data,
+            images: data.image ? [data.image] : [],
+            originalPrice: data.originalPrice ? Number(data.originalPrice) : undefined,
+        };
+
         if (editingProduct) {
-            setProductList(prev => prev.map(p =>
-                p.id === editingProduct.id
-                    ? {
-                        ...p,
-                        name: data.name,
-                        category: data.category,
-                        price: data.price,
-                        originalPrice: data.originalPrice ? Number(data.originalPrice) : undefined,
-                        description: data.description,
-                        image: data.image,
-                        variants: data.variants
-                    }
-                    : p
-            ));
+            updateProduct.mutate({ id: editingProduct._id, data: payload }, {
+                onSuccess: () => setShowModal(false)
+            });
         } else {
-            const newProduct: Product = {
-                id: Date.now(),
-                name: data.name,
-                category: data.category,
-                price: data.price,
-                originalPrice: data.originalPrice ? Number(data.originalPrice) : undefined,
-                description: data.description,
-                image: data.image || "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80",
-                rating: 5.0,
-                reviews: 0,
-                isNew: true,
-                variants: data.variants,
-                slug: data.name.toLowerCase().replace(/ /g, "-")
-            };
-            setProductList(prev => [newProduct, ...prev]);
+            createProduct.mutate(payload, {
+                onSuccess: () => setShowModal(false)
+            });
         }
-        setShowModal(false);
     };
 
-    const handleDelete = (id: number) => {
-        setProductList(prev => prev.filter(p => p.id !== id));
-        setDeletePopoverOpen(null);
+    const handleDelete = (id: string) => {
+        deleteProduct.mutate(id, {
+            onSuccess: () => setDeletePopoverOpen(null)
+        });
     };
 
     return (
@@ -266,8 +259,9 @@ export default function AdminProducts() {
                             <SelectContent>
                                 <SelectGroup>
                                     <SelectLabel>Kategori</SelectLabel>
+                                    <SelectItem value="all">Semua</SelectItem>
                                     {categories.map((cat) => (
-                                        <SelectItem key={cat.slug} value={cat.slug}>{cat.name}</SelectItem>
+                                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                                     ))}
                                 </SelectGroup>
                             </SelectContent>
@@ -303,31 +297,30 @@ export default function AdminProducts() {
                 {(categoryFilter !== "all" || searchQuery) && (
                     <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border/50">
                         <span className="text-sm text-muted-foreground">
-                            Menampilkan {filteredProducts.length} produk
+                            Menampilkan {totalData} produk
                         </span>
-                        {(categoryFilter !== "all" || searchQuery) && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => {
-                                    setCategoryFilter("all");
-                                    setSearchQuery("");
-                                }}
-                                className="text-xs h-7"
-                            >
-                                Reset Filter
-                            </Button>
-                        )}
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                                setCategoryFilter("all");
+                                setSearchQuery("");
+                            }}
+                            className="text-xs h-7"
+                        >
+                            Reset Filter
+                        </Button>
                     </div>
                 )}
             </div>
 
             <DataTable
                 columns={columns}
-                data={paginatedProducts}
+                data={products}
                 page={currentPage}
                 totalPage={totalPages}
                 onChangePage={setCurrentPage}
+                isLoading={isLoading}
             />
 
             <DialogProductMutation

@@ -2,7 +2,7 @@ import type { Product } from "@/types";
 
 export const products: Product[] = [
     {
-        id: 1,
+        _id: "1",
         name: "Kursi Kayu Minimalis",
         category: "Furniture",
         price: 1250000,
@@ -20,7 +20,7 @@ export const products: Product[] = [
         slug: "kursi-kayu-minimalis"
     },
     {
-        id: 2,
+        _id: "2",
         name: "Lampu Meja Nordic",
         category: "Lighting",
         price: 450000,
@@ -36,7 +36,7 @@ export const products: Product[] = [
         slug: "lampu-meja-nordic"
     },
     {
-        id: 3,
+        _id: "3",
         name: "Vas Keramik Artisan",
         category: "Dekorasi",
         price: 275000,
@@ -51,7 +51,7 @@ export const products: Product[] = [
         slug: "vas-keramik-artisan"
     },
     {
-        id: 4,
+        _id: "4",
         name: "Sofa 3 Seater Premium",
         category: "Furniture",
         price: 8500000,
@@ -69,7 +69,7 @@ export const products: Product[] = [
         slug: "sofa-3-seater-premium"
     },
     {
-        id: 5,
+        _id: "5",
         name: "Meja Kopi Marmer",
         category: "Furniture",
         price: 2750000,
@@ -83,7 +83,7 @@ export const products: Product[] = [
         slug: "meja-kopi-marmer"
     },
     {
-        id: 6,
+        _id: "6",
         name: "Rak Buku Modular",
         category: "Storage",
         price: 1850000,
@@ -98,7 +98,7 @@ export const products: Product[] = [
         slug: "rak-buku-modular"
     },
     {
-        id: 7,
+        _id: "7",
         name: "Karpet Tenun Tradisional",
         category: "Dekorasi",
         price: 950000,
@@ -113,7 +113,7 @@ export const products: Product[] = [
         slug: "karpet-tenun-tradisional"
     },
     {
-        id: 8,
+        _id: "8",
         name: "Cermin Dinding Rotan",
         category: "Dekorasi",
         price: 525000,
@@ -130,8 +130,8 @@ export const products: Product[] = [
 
 export const categories = [
     { name: "Semua", slug: "all" },
-    { name: "Furniture", slug: "furniture" },
-    { name: "Lighting", slug: "lighting" },
-    { name: "Dekorasi", slug: "dekorasi" },
-    { name: "Storage", slug: "storage" }
+    { name: "Furniture", slug: "Furniture" },
+    { name: "Lighting", slug: "Lighting" },
+    { name: "Dekorasi", slug: "Dekorasi" },
+    { name: "Storage", slug: "Storage" }
 ];

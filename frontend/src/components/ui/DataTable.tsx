@@ -26,6 +26,7 @@ interface DataTableProps<T> {
     totalPage: number;
     onChangePage: (page: number) => void;
     className?: string;
+    isLoading?: boolean;
 }
 
 const getValue = (obj: any, path: string): any => {
@@ -41,6 +42,7 @@ export function DataTable<T extends Record<string, any>>({
     totalPage,
     onChangePage,
     className,
+    isLoading = false,
 }: DataTableProps<T>) {
     const handlePrevious = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -93,7 +95,17 @@ export function DataTable<T extends Record<string, any>>({
                         </tr>
                     </thead>
                     <tbody>
-                        {data.length === 0 ? (
+                        {isLoading ? (
+                            Array.from({ length: 5 }).map((_, i) => (
+                                <tr key={`skeleton-${i}`} className="data-table-row">
+                                    {columns.map((column, colIndex) => (
+                                        <td key={`${column.key}-${colIndex}`} className={cn("data-table-cell", column.cellClassName)}>
+                                            <div className="h-4 bg-muted rounded animate-pulse" />
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))
+                        ) : data.length === 0 ? (
                             <tr>
                                 <td colSpan={columns.length} className="data-table-cell text-center py-10 text-muted-foreground">
                                     Tidak ada data ditemukan.
@@ -101,7 +113,7 @@ export function DataTable<T extends Record<string, any>>({
                             </tr>
                         ) : (
                             data.map((item, rowIndex) => (
-                                <tr key={item.id || rowIndex} className="data-table-row">
+                                <tr key={(item as any)._id || (item as any).id || rowIndex} className="data-table-row">
                                     {columns.map((column, colIndex) => {
                                         const value = getValue(item, column.key);
                                         return (

@@ -4,7 +4,7 @@ import { successResponse, errorResponse } from '../../utils/response';
 
 export const getProducts = async (req: Request, res: Response) => {
     try {
-        const { page = 1, limit = 10, category, minPrice, maxPrice, name } = req.query;
+        const { page = 1, limit = 10, category, minPrice, maxPrice, name, sortBy, sortOrder } = req.query;
 
         const filter: any = {};
         if (category) filter.category = category;
@@ -17,11 +17,18 @@ export const getProducts = async (req: Request, res: Response) => {
 
         const skip = (Number(page) - 1) * Number(limit);
 
+        // Build sort object
+        let sort: Record<string, 1 | -1> = { createdAt: -1 }; // default: newest first
+        if (sortBy) {
+            const order = sortOrder === 'asc' ? 1 : -1;
+            sort = { [sortBy as string]: order };
+        }
+
         const total_data = await Product.countDocuments(filter);
         const products = await Product.find(filter)
             .skip(skip)
             .limit(Number(limit))
-            .sort({ createdAt: -1 });
+            .sort(sort);
 
         const total_page = Math.ceil(total_data / Number(limit));
 

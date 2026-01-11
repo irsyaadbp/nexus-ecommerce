@@ -45,7 +45,7 @@ export default function ProductDetail() {
     }
 
     const relatedProducts = products
-        .filter((p) => p.category === product.category && p.id !== product.id)
+        .filter((p) => p.category === product.category && p._id !== product._id)
         .slice(0, 4);
 
     const features = [
@@ -70,7 +70,7 @@ export default function ProductDetail() {
                     >
                         <motion.div
                             className="product-detail-main-image"
-                            layoutId={`product-image-${product.id}`}
+                            layoutId={`product-image-${product._id}`}
                         >
                             <motion.img
                                 key={selectedImage}
@@ -276,7 +276,7 @@ export default function ProductDetail() {
                         </motion.div>
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {relatedProducts.map((product, index) => (
-                                <ProductCard key={product.id} product={product} index={index} />
+                                <ProductCard key={product._id} product={product} index={index} />
                             ))}
                         </div>
                     </div>

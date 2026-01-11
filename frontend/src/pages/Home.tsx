@@ -44,7 +44,7 @@ export default function Home() {
                             viewport={{ once: true }}
                         >
                             {saleProducts.slice(0, 4).map((product, index) => (
-                                <ProductCard key={product.id} product={product} index={index} />
+                                <ProductCard key={product._id} product={product} index={index} />
                             ))}
                         </motion.div>
                     </div>
@@ -75,7 +75,7 @@ export default function Home() {
                         viewport={{ once: true }}
                     >
                         {products.map((product, index) => (
-                            <ProductCard key={product.id} product={product} index={index} />
+                            <ProductCard key={product._id} product={product} index={index} />
                         ))}
                     </motion.div>
 
