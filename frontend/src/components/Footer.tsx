@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { Instagram, Facebook, Twitter } from "lucide-react";
 import { Logo } from "./Logo";
+import { Button } from "./ui/button";
 
 export function Footer() {
     return (
@@ -13,15 +14,22 @@ export function Footer() {
                             Premium furniture & home decor dengan desain modern dan kualitas terbaik untuk ruangan impian Anda.
                         </p>
                         <div className="mt-6 flex gap-3">
-                            <a href="#" className="btn-icon btn-secondary">
-                                <Instagram className="h-4 w-4" />
-                            </a>
-                            <a href="#" className="btn-icon btn-secondary">
-                                <Facebook className="h-4 w-4" />
-                            </a>
-                            <a href="#" className="btn-icon btn-secondary">
-                                <Twitter className="h-4 w-4" />
-                            </a>
+
+                            <Link target="_blank" to="https://www.instagram.com/">
+                                <Button size={'icon'} variant={'secondary'}>
+                                    <Instagram className="h-4 w-4" />
+                                </Button>
+                            </Link>
+                            <Link target="_blank" to="https://www.facebook.com/">
+                                <Button size={'icon'} variant={'secondary'}>
+                                    <Facebook className="h-4 w-4" />
+                                </Button>
+                            </Link>
+                            <Link target="_blank" to="https://www.twitter.com/">
+                                <Button size={'icon'} variant={'secondary'}>
+                                    <Twitter className="h-4 w-4" />
+                                </Button>
+                            </Link>
                         </div>
                     </div>
 

@@ -42,13 +42,13 @@ const Header = () => {
                         <ShoppingBag className="h-5 w-5" />
 
                     </Button>
-                    <Button>
+                    <Button className="hidden lg:block">
                         Login/Register
                     </Button>
                     <Button
                         size="icon"
                         variant={'ghost'}
-                        className="nav-icon-btn md:hidden"
+                        className="md:hidden"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         aria-label="Menu"
                     >
@@ -72,13 +72,9 @@ const Header = () => {
                                 {link.name}
                             </Link>
                         ))}
-                        <Link
-                            to="/admin"
-                            className="py-3 text-base font-medium text-muted-foreground hover:text-foreground"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            Admin Dashboard
-                        </Link>
+                        <Button className="mt-8">
+                            Login/Register
+                        </Button>
                     </nav>
                 </div>
             )}

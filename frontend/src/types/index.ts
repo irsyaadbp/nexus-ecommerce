@@ -9,7 +9,7 @@ export interface Product {
     rating: number;
     reviews: number;
     description: string;
-    sizes?: string[];
+    variants?: string[];
     isNew?: boolean;
     isSale?: boolean;
     slug: string;

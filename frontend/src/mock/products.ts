@@ -64,7 +64,7 @@ export const products: Product[] = [
         rating: 4.7,
         reviews: 203,
         description: "Sofa premium dengan bahan fabric berkualitas tinggi dan busa dengan kepadatan optimal untuk kenyamanan maksimal. Desain modern yang cocok untuk berbagai gaya interior.",
-        sizes: ["2 Seater", "3 Seater", "L-Shape"],
+        variants: ["2 Seater", "3 Seater", "L-Shape"],
         isSale: true,
         slug: "sofa-3-seater-premium"
     },
@@ -109,7 +109,7 @@ export const products: Product[] = [
         rating: 4.8,
         reviews: 112,
         description: "Karpet tenun tangan dengan motif tradisional Indonesia. Dibuat oleh pengrajin lokal menggunakan teknik tenun warisan budaya.",
-        sizes: ["120x180", "160x230", "200x300"],
+        variants: ["120x180", "160x230", "200x300"],
         slug: "karpet-tenun-tradisional"
     },
     {
