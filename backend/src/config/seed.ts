@@ -20,7 +20,7 @@ const productData = [
         ],
         rating: 4.8,
         reviews: 124,
-        description: "Kursi kayu minimalis dengan desain elegan dan nyaman. Dibuat dari kayu jati berkualitas tinggi dengan finishing natural yang tahan lama. Cocok untuk ruang tamu atau ruang kerja.",
+        description: "Kursi kayu minimalis dengan desain elegan dan nyaman."
     },
     {
         name: "Lampu Meja Nordic",
@@ -28,12 +28,11 @@ const productData = [
         category: "Lighting",
         price: 450000,
         images: [
-            "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&q=80",
-            "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=600&q=80"
+            "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&q=80"
         ],
         rating: 4.6,
         reviews: 89,
-        description: "Lampu meja dengan desain Nordic yang simpel and modern. Memberikan pencahayaan hangat yang sempurna untuk menciptakan suasana cozy di ruangan Anda.",
+        description: "Lampu meja bergaya Nordic dengan cahaya hangat."
     },
     {
         name: "Vas Keramik Artisan",
@@ -41,12 +40,11 @@ const productData = [
         category: "Dekorasi",
         price: 275000,
         images: [
-            "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=600&q=80",
-            "https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=600&q=80"
+            "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=600&q=80"
         ],
         rating: 4.9,
         reviews: 56,
-        description: "Vas keramik buatan tangan dengan tekstur unik dan warna earthy. Setiap vas memiliki karakteristik tersendiri karena dibuat secara handmade oleh pengrajin lokal."
+        description: "Vas keramik handmade dengan desain unik."
     },
     {
         name: "Sofa 3 Seater Premium",
@@ -55,13 +53,12 @@ const productData = [
         price: 8500000,
         originalPrice: 9500000,
         images: [
-            "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80",
             "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&q=80"
         ],
         rating: 4.7,
         reviews: 203,
-        description: "Sofa premium dengan bahan fabric berkualitas tinggi and busa dengan kepadatan optimal untuk kenyamanan maksimal. Desain modern yang cocok untuk berbagai gaya interior.",
-        variants: [{ name: "2 Seater" }, { name: "3 Seater" }, { name: "L-Shape" }],
+        description: "Sofa premium dengan kenyamanan maksimal.",
+        variants: [{ name: "2 Seater" }, { name: "3 Seater" }, { name: "L-Shape" }]
     },
     {
         name: "Meja Kopi Marmer",
@@ -73,45 +70,181 @@ const productData = [
         ],
         rating: 4.5,
         reviews: 67,
-        description: "Meja kopi dengan top marmer asli dan kaki besi powder coated. Memberikan sentuhan mewah dan elegan pada ruang tamu Anda."
+        description: "Meja kopi dengan top marmer asli."
     },
+
     {
-        name: "Rak Buku Modular",
-        slug: "rak-buku-modular",
-        category: "Storage",
-        price: 1850000,
-        images: [
-            "https://images.unsplash.com/photo-1594620302200-9a762244a156?w=600&q=80"
-        ],
-        rating: 4.4,
-        reviews: 45,
-        description: "Rak buku modular yang dapat disesuaikan dengan kebutuhan ruangan Anda. Material kayu solid dengan finishing natural.",
-    },
-    {
-        name: "Karpet Tenun Tradisional",
-        slug: "karpet-tenun-tradisional",
-        category: "Dekorasi",
-        price: 950000,
-        images: [
-            "https://images.unsplash.com/photo-1600166898405-da9535204843?w=600&q=80"
-        ],
+        name: "Meja Makan Kayu Solid",
+        slug: "meja-makan-kayu-solid",
+        category: "Furniture",
+        price: 7200000,
+        images: ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80"],
         rating: 4.8,
-        reviews: 112,
-        description: "Karpet tenun tangan dengan motif tradisional Indonesia. Dibuat oleh pengrajin lokal menggunakan teknik tenun warisan budaya.",
-        variants: [{ name: "120x180" }, { name: "160x230" }, { name: "200x300" }]
+        reviews: 142,
+        description: "Meja makan dari kayu solid dengan finishing natural."
     },
     {
-        name: "Cermin Dinding Rotan",
-        slug: "cermin-dinding-rotan",
-        category: "Dekorasi",
-        price: 525000,
-        images: [
-            "https://images.unsplash.com/photo-1618220179428-22790b461013?w=600&q=80"
-        ],
+        name: "Kursi Bar Industrial",
+        slug: "kursi-bar-industrial",
+        category: "Furniture",
+        price: 950000,
+        images: ["https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80"],
+        rating: 4.5,
+        reviews: 63,
+        description: "Kursi bar dengan rangka besi dan dudukan kayu."
+    },
+    {
+        name: "Meja Kerja Scandinavian",
+        slug: "meja-kerja-scandinavian",
+        category: "Furniture",
+        price: 3250000,
+        images: ["https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80"],
         rating: 4.6,
-        reviews: 78,
-        description: "Cermin dinding dengan bingkai rotan natural. Menambah nuansa bohemian dan hangat pada ruangan Anda."
-    }
+        reviews: 88,
+        description: "Meja kerja kayu dengan gaya Scandinavian."
+    },
+    {
+        name: "Bangku Kayu Rustic",
+        slug: "bangku-kayu-rustic",
+        category: "Furniture",
+        price: 1350000,
+        images: ["https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?w=600&q=80"],
+        rating: 4.4,
+        reviews: 54,
+        description: "Bangku kayu rustic untuk ruang tamu atau taman."
+    },
+
+    {
+        name: "Lampu Gantung Industrial",
+        slug: "lampu-gantung-industrial",
+        category: "Lighting",
+        price: 1250000,
+        images: ["https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=600&q=80"],
+        rating: 4.7,
+        reviews: 110,
+        description: "Lampu gantung bergaya industrial modern."
+    },
+    {
+        name: "Lampu Lantai Modern",
+        slug: "lampu-lantai-modern",
+        category: "Lighting",
+        price: 1850000,
+        images: ["https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=600&q=80"],
+        rating: 4.6,
+        reviews: 95,
+        description: "Lampu lantai dengan desain ramping dan modern."
+    },
+    {
+        name: "Lampu Tidur Minimalis",
+        slug: "lampu-tidur-minimalis",
+        category: "Lighting",
+        price: 350000,
+        images: ["https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&q=80"],
+        rating: 4.4,
+        reviews: 77,
+        description: "Lampu tidur dengan cahaya lembut."
+    },
+    {
+        name: "Lampu LED Smart",
+        slug: "lampu-led-smart",
+        category: "Lighting",
+        price: 425000,
+        images: ["https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=600&q=80"],
+        rating: 4.6,
+        reviews: 120,
+        description: "Lampu LED pintar dengan kontrol aplikasi."
+    },
+    {
+        name: "Jam Dinding Kayu",
+        slug: "jam-dinding-kayu",
+        category: "Dekorasi",
+        price: 375000,
+        images: ["https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=600&q=80"],
+        rating: 4.5,
+        reviews: 73,
+        description: "Jam dinding dari kayu natural."
+    },
+    {
+        name: "Tanaman Hias Monstera",
+        slug: "tanaman-hias-monstera",
+        category: "Dekorasi",
+        price: 225000,
+        images: ["https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=600&q=80"],
+        rating: 4.8,
+        reviews: 134,
+        description: "Tanaman hias monstera untuk nuansa segar."
+    },
+    {
+        name: "Patung Kayu Etnik",
+        slug: "patung-kayu-etnik",
+        category: "Dekorasi",
+        price: 650000,
+        images: ["https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&q=80"],
+        rating: 4.6,
+        reviews: 41,
+        description: "Patung kayu dengan motif etnik tradisional."
+    },
+    {
+        name: "Bantal Sofa Bohemian",
+        slug: "bantal-sofa-bohemian",
+        category: "Dekorasi",
+        price: 185000,
+        images: ["https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&q=80"],
+        rating: 4.5,
+        reviews: 88,
+        description: "Bantal sofa dengan motif bohemian."
+    },
+
+    {
+        name: "Rak Sepatu Kayu",
+        slug: "rak-sepatu-kayu",
+        category: "Storage",
+        price: 850000,
+        images: ["https://images.unsplash.com/photo-1594620302200-9a762244a156?w=600&q=80"],
+        rating: 4.4,
+        reviews: 66,
+        description: "Rak sepatu dari kayu solid."
+    },
+    {
+        name: "Rak Dinding Minimalis",
+        slug: "rak-dinding-minimalis",
+        category: "Storage",
+        price: 450000,
+        images: ["https://images.unsplash.com/photo-1594620302200-9a762244a156?w=600&q=80"],
+        rating: 4.6,
+        reviews: 92,
+        description: "Rak dinding hemat ruang."
+    },
+    {
+        name: "Laci Penyimpanan Modern",
+        slug: "laci-penyimpanan-modern",
+        category: "Storage",
+        price: 1750000,
+        images: ["https://images.unsplash.com/photo-1594620302200-9a762244a156?w=600&q=80"],
+        rating: 4.5,
+        reviews: 74,
+        description: "Laci penyimpanan dengan desain modern."
+    },
+    {
+        name: "Kotak Penyimpanan Rotan",
+        slug: "kotak-penyimpanan-rotan",
+        category: "Storage",
+        price: 325000,
+        images: ["https://images.unsplash.com/photo-1618220179428-22790b461013?w=600&q=80"],
+        rating: 4.6,
+        reviews: 58,
+        description: "Kotak penyimpanan berbahan rotan."
+    },
+    {
+        name: "Rak Serbaguna Besi",
+        slug: "rak-serbaguna-besi",
+        category: "Storage",
+        price: 950000,
+        images: ["https://images.unsplash.com/photo-1594620302200-9a762244a156?w=600&q=80"],
+        rating: 4.5,
+        reviews: 83,
+        description: "Rak besi kuat dan multifungsi."
+    },
 ];
 
 const seedData = async () => {
