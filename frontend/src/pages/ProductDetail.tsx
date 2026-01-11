@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProductCard } from "@/components/ProductCard";
 
-const MotionButton = motion(Button);
-const MotionBadge = motion(Badge);
+const MotionButton = motion.create(Button);
+const MotionBadge = motion.create(Badge);
 
 export default function ProductDetail() {
     const { slug } = useParams<{ slug: string }>();

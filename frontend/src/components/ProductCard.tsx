@@ -13,8 +13,8 @@ interface ProductCardProps {
 }
 
 
-const MotionButton = motion(Button);
-const MotionBadge = motion(Badge);
+const MotionButton = motion.create(Button);
+const MotionBadge = motion.create(Badge);
 
 export function ProductCard({ product, index = 0 }: ProductCardProps) {
     const discount = product.originalPrice

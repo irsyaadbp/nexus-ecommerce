@@ -9,12 +9,25 @@ export const authService = {
         });
     },
 
+    userLogin: async (data: LoginInput): Promise<LoginResponse> => {
+        return fetcher<LoginResponse>('/user/login', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
+    },
+
     getAdminMe: async (): Promise<UserResponse> => {
         return fetcher<UserResponse>('/admin/me');
     },
 
     logoutAdmin: async (): Promise<void> => {
         return fetcher<void>('/admin/logout', {
+            method: 'POST',
+        });
+    },
+
+    logoutUser: async (): Promise<void> => {
+        return fetcher<void>('/user/logout', {
             method: 'POST',
         });
     },
