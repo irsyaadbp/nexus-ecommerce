@@ -21,6 +21,10 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
         ? Math.round((1 - product.price / product.originalPrice) * 100)
         : 0;
 
+    const isNew = product.createdAt
+        ? (new Date().getTime() - new Date(product.createdAt).getTime()) < 24 * 60 * 60 * 1000
+        : false;
+    const isSale = !isNew && !!product.originalPrice;
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -43,7 +47,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
 
                         {/* Badges */}
                         <div className="absolute top-3 left-3 flex flex-col gap-2">
-                            {product.isNew && (
+                            {isNew && (
                                 <MotionBadge
                                     initial={{ x: -20, opacity: 0 }}
                                     animate={{ x: 0, opacity: 1 }}
@@ -51,7 +55,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                                     NEW
                                 </MotionBadge>
                             )}
-                            {discount > 0 && (
+                            {isSale && (
                                 <MotionBadge
                                     initial={{ x: -20, opacity: 0 }}
                                     animate={{ x: 0, opacity: 1 }}
@@ -113,7 +117,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                         </div>
 
                         {/* Price */}
-                        <div className="flex flex-col md:flex-row md:items-center md:gap-2 pt-1">
+                        <div className="flex md:items-center flex-wrap gap-2 pt-1">
                             <span className="text-lg font-bold text-primary">
                                 {formatPrice(product.price)}
                             </span>

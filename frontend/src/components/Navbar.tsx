@@ -143,29 +143,7 @@ export function Navbar() {
                                 {link.name}
                             </Link>
                         ))}
-                        {isAuthenticated ? (
-                            <>
-                                {user?.role === 'ADMIN' && (
-                                    <Link
-                                        to="/admin"
-                                        className="py-3 text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
-                                        onClick={() => setIsMenuOpen(false)}
-                                    >
-                                        Dashboard
-                                    </Link>
-                                )}
-                                <Button
-                                    variant="outline"
-                                    className="mt-6 w-full text-destructive border-destructive hover:bg-destructive/10"
-                                    onClick={() => {
-                                        logout.mutate();
-                                        setIsMenuOpen(false);
-                                    }}
-                                >
-                                    Logout
-                                </Button>
-                            </>
-                        ) : (
+                        {!isAuthenticated && (
                             <Link to="/login" className="w-full" onClick={() => setIsMenuOpen(false)}>
                                 <Button className="mt-6 w-full">
                                     Login/Register

@@ -18,6 +18,13 @@ export const useUserProductBySlug = (slug: string | undefined) => {
     });
 };
 
+export const useUserCategories = () => {
+    return useQuery({
+        queryKey: ["user-categories"],
+        queryFn: productService.getUserCategories,
+    });
+};
+
 // Admin hooks
 export const useAdminProducts = (params: Record<string, string>) => {
     return useQuery({

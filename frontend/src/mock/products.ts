@@ -7,7 +7,6 @@ export const products: Product[] = [
         category: "Furniture",
         price: 1250000,
         originalPrice: 1500000,
-        image: "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&q=80",
         images: [
             "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&q=80",
             "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80",
@@ -16,7 +15,6 @@ export const products: Product[] = [
         rating: 4.8,
         reviews: 124,
         description: "Kursi kayu minimalis dengan desain elegan dan nyaman. Dibuat dari kayu jati berkualitas tinggi dengan finishing natural yang tahan lama. Cocok untuk ruang tamu atau ruang kerja.",
-        isSale: true,
         slug: "kursi-kayu-minimalis"
     },
     {
@@ -24,7 +22,6 @@ export const products: Product[] = [
         name: "Lampu Meja Nordic",
         category: "Lighting",
         price: 450000,
-        image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&q=80",
         images: [
             "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=600&q=80",
             "https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=600&q=80"
@@ -32,7 +29,6 @@ export const products: Product[] = [
         rating: 4.6,
         reviews: 89,
         description: "Lampu meja dengan desain Nordic yang simpel dan modern. Memberikan pencahayaan hangat yang sempurna untuk menciptakan suasana cozy di ruangan Anda.",
-        isNew: true,
         slug: "lampu-meja-nordic"
     },
     {
@@ -40,7 +36,6 @@ export const products: Product[] = [
         name: "Vas Keramik Artisan",
         category: "Dekorasi",
         price: 275000,
-        image: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=600&q=80",
         images: [
             "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?w=600&q=80",
             "https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=600&q=80"
@@ -56,7 +51,6 @@ export const products: Product[] = [
         category: "Furniture",
         price: 8500000,
         originalPrice: 9500000,
-        image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80",
         images: [
             "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80",
             "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=600&q=80"
@@ -65,7 +59,6 @@ export const products: Product[] = [
         reviews: 203,
         description: "Sofa premium dengan bahan fabric berkualitas tinggi dan busa dengan kepadatan optimal untuk kenyamanan maksimal. Desain modern yang cocok untuk berbagai gaya interior.",
         variants: [{ name: "2 Seater" }, { name: "3 Seater" }, { name: "L-Shape" }],
-        isSale: true,
         slug: "sofa-3-seater-premium"
     },
     {
@@ -73,7 +66,6 @@ export const products: Product[] = [
         name: "Meja Kopi Marmer",
         category: "Furniture",
         price: 2750000,
-        image: "https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=600&q=80",
         images: [
             "https://images.unsplash.com/photo-1533090481720-856c6e3c1fdc?w=600&q=80"
         ],
@@ -87,14 +79,12 @@ export const products: Product[] = [
         name: "Rak Buku Modular",
         category: "Storage",
         price: 1850000,
-        image: "https://images.unsplash.com/photo-1594620302200-9a762244a156?w=600&q=80",
         images: [
             "https://images.unsplash.com/photo-1594620302200-9a762244a156?w=600&q=80"
         ],
         rating: 4.4,
         reviews: 45,
         description: "Rak buku modular yang dapat disesuaikan dengan kebutuhan ruangan Anda. Material kayu solid dengan finishing natural.",
-        isNew: true,
         slug: "rak-buku-modular"
     },
     {
@@ -102,7 +92,6 @@ export const products: Product[] = [
         name: "Karpet Tenun Tradisional",
         category: "Dekorasi",
         price: 950000,
-        image: "https://images.unsplash.com/photo-1600166898405-da9535204843?w=600&q=80",
         images: [
             "https://images.unsplash.com/photo-1600166898405-da9535204843?w=600&q=80"
         ],
@@ -117,7 +106,6 @@ export const products: Product[] = [
         name: "Cermin Dinding Rotan",
         category: "Dekorasi",
         price: 525000,
-        image: "https://images.unsplash.com/photo-1618220179428-22790b461013?w=600&q=80",
         images: [
             "https://images.unsplash.com/photo-1618220179428-22790b461013?w=600&q=80"
         ],

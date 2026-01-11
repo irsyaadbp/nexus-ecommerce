@@ -57,6 +57,10 @@ export const productService = {
         return fetcher<ProductResponse>(`/user/products/${slug}`);
     },
 
+    getUserCategories: async () => {
+        return fetcher<CategoriesResponse>("/user/products/categories");
+    },
+
     // Admin API
     getAdminProducts: async (params: Record<string, string>) => {
         return fetcher<ProductsResponse>("/admin/products", { params });
