@@ -1,3 +1,4 @@
+import { Input } from "@/components/ui/input";
 import { Button } from "../../components/ui/button";
 
 export default function AdminLogin() {
@@ -11,18 +12,18 @@ export default function AdminLogin() {
                 <form className="space-y-4">
                     <div className="space-y-2">
                         <label className="text-sm font-medium">Email</label>
-                        <input
+                        <Input
                             type="email"
                             placeholder="admin@nexus.com"
-                            className="w-full h-10 px-3 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+                            className="mt-2"
                         />
                     </div>
                     <div className="space-y-2">
                         <label className="text-sm font-medium">Password</label>
-                        <input
+                        <Input
                             type="password"
                             placeholder="••••••••"
-                            className="w-full h-10 px-3 rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-primary/50"
+                            className="mt-2"
                         />
                     </div>
                     <Button className="w-full">Login as Admin</Button>
