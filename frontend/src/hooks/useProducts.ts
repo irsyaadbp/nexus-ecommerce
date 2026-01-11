@@ -10,6 +10,14 @@ export const useUserProducts = (params: Record<string, string>) => {
     });
 };
 
+export const useUserProductBySlug = (slug: string | undefined) => {
+    return useQuery({
+        queryKey: ["user-product", slug],
+        queryFn: () => productService.getUserProductBySlug(slug!),
+        enabled: !!slug,
+    });
+};
+
 // Admin hooks
 export const useAdminProducts = (params: Record<string, string>) => {
     return useQuery({

@@ -1,31 +1,52 @@
-import { products } from "@/mock/products";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { motion } from "motion/react";
 import { Link } from "react-router";
-import { Truck, Shield, RefreshCw, ShoppingBag, Heart, Star, ChevronRight, Minus, Plus } from "lucide-react";
+import { Truck, Shield, RefreshCw, ShoppingBag, Heart, Star, ChevronRight, Minus, Plus, Loader2 } from "lucide-react";
 import { formatPrice } from "@/lib/formatPrice";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProductCard } from "@/components/ProductCard";
+import { useUserProductBySlug, useUserProducts } from "@/hooks/useProducts";
 
 const MotionButton = motion.create(Button);
 const MotionBadge = motion.create(Badge);
 
 export default function ProductDetail() {
     const { slug } = useParams<{ slug: string }>();
-
-
-    const product = products.find((p) => p.slug === slug);
+    // Using slug as key for state reset when URL changes
     const [selectedImage, setSelectedImage] = useState(0);
     const [selectedSize, setSelectedSize] = useState(0);
     const [quantity, setQuantity] = useState(1);
 
+    // Fetch product by slug
+    const { data: productData, isLoading, isError } = useUserProductBySlug(slug);
+    const product = productData?.data;
+
+    // Fetch related products (same category)
+    const { data: relatedData } = useUserProducts({
+        category: product?.category || "",
+        limit: "5"
+    });
+    const relatedProducts = relatedData?.data?.products?.filter(p => p._id !== product?._id)?.slice(0, 4) || [];
+
+    // Reset state when slug changes
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [slug]);
 
-    if (!product) {
+    if (isLoading) {
+        return (
+            <div className="container-main py-20 text-center">
+                <div className="flex items-center justify-center gap-2">
+                    <Loader2 className="h-6 w-6 animate-spin" />
+                    <span>Memuat produk...</span>
+                </div>
+            </div>
+        );
+    }
+
+    if (isError || !product) {
         return (
             <div className="container-main py-20 text-center">
                 <motion.div
@@ -43,10 +64,6 @@ export default function ProductDetail() {
             </div>
         );
     }
-
-    const relatedProducts = products
-        .filter((p) => p.category === product.category && p._id !== product._id)
-        .slice(0, 4);
 
     const features = [
         { icon: Truck, text: "Gratis ongkir untuk pembelian di atas Rp 500.000" },
@@ -157,7 +174,7 @@ export default function ProductDetail() {
                         <p className="product-detail-description">{product.description}</p>
 
                         {/* Size Options */}
-                        {product.variants && (
+                        {product.variants?.[0] && (
                             <div className="product-detail-options">
                                 <span className="product-detail-option-label">
                                     Variant: <strong className="text-primary">{product.variants[selectedSize]?.name}</strong>
