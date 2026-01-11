@@ -1,5 +1,5 @@
 import { fetcher } from "../lib/api";
-import type { LoginInput, LoginResponse, UserResponse } from "@/types/auth.types";
+import type { LoginInput, LoginResponse, RegisterInput, UserResponse } from "@/types/auth.types";
 
 export const authService = {
     adminLogin: async (data: LoginInput): Promise<LoginResponse> => {
@@ -11,6 +11,13 @@ export const authService = {
 
     userLogin: async (data: LoginInput): Promise<LoginResponse> => {
         return fetcher<LoginResponse>('/user/login', {
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
+    },
+
+    userRegister: async (data: RegisterInput): Promise<LoginResponse> => {
+        return fetcher<LoginResponse>('/user/register', {
             method: 'POST',
             body: JSON.stringify(data),
         });
