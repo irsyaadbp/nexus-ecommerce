@@ -1,7 +1,8 @@
 import LogRocket from "logrocket";
-import { useAuth } from "./useAuth";
+import { useUserMe } from "./useAuth";
 import { useVisitor } from "./useVisitor";
 import { ANALYTIC_ENABLE } from "@/lib/constants";
+import type { User } from "@/types/auth.types";
 
 interface AddToCartParams {
     price: number;
@@ -14,22 +15,24 @@ interface AddToCartParams {
 }
 
 export function useAnalytic() {
-    const { user } = useAuth();
+    const { data: userProfile } = useUserMe();
+    const user = userProfile?.data;
     const { visitorId } = useVisitor();
 
-    const identify = () => {
-        const userId = user?._id || visitorId;
+    const identify = (userOverride?: User, source?: string) => {
+        console.log(userOverride)
+        const userId = userOverride?._id || user?._id || visitorId;
         const params = {
-            name: user?.username || 'guest',
-            email: user?.email || 'guest',
-            role: user?.role || 'guest',
+            name: userOverride?.username || user?.username || visitorId,
+            email: userOverride?.email || user?.email || 'guest',
+            role: userOverride?.role || user?.role || 'guest',
         }
         if (ANALYTIC_ENABLE) {
             LogRocket.identify(userId, params);
         }
 
         if (import.meta.env.DEV) {
-            console.group("Analytics: Identify");
+            console.group("Analytics: Identify", { source });
             console.log(JSON.stringify({ userId, ...params }, null, 2));
             console.groupEnd();
         }

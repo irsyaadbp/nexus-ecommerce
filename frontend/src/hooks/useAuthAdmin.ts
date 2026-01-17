@@ -4,6 +4,7 @@ import type { LoginInput } from "../types/auth.types";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { SESSION_TOKEN_KEY } from "../lib/constants";
+import { useAnalytic } from "./useAnalytic";
 
 export const useAdminMe = () => {
     return useQuery({
@@ -17,6 +18,7 @@ export const useAdminMe = () => {
 export const useLoginAdmin = () => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const log = useAnalytic()
 
     return useMutation({
         mutationFn: (data: LoginInput) => authService.adminLogin(data),
@@ -24,6 +26,7 @@ export const useLoginAdmin = () => {
             localStorage.setItem(SESSION_TOKEN_KEY, response.data.token);
             queryClient.setQueryData(['admin-me'], { data: response.data.user });
             toast.success("Login successful");
+            log.identify(response.data.user);
             navigate('/admin');
         },
         onError: (error: Error) => {
@@ -35,12 +38,14 @@ export const useLoginAdmin = () => {
 export const useLogoutAdmin = () => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
+    const log = useAnalytic()
 
     return useMutation({
         mutationFn: authService.logoutAdmin,
         onSuccess: () => {
             localStorage.removeItem(SESSION_TOKEN_KEY);
             queryClient.clear();
+            log.identify();
             toast.success("Logged out successfully");
             navigate('/admin/login');
         },
