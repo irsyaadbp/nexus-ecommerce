@@ -4,6 +4,7 @@ import { RouterProvider } from 'react-router'
 import './main.css'
 import router from './router.tsx'
 import { Toaster } from '@/components/ui/sonner'
+import { AuthProvider } from './components/auth/AuthProvider'
 
 import {
   QueryClient,
@@ -24,7 +25,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <Toaster />
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </QueryClientProvider>
   </StrictMode>,
 )
