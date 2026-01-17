@@ -9,7 +9,7 @@ import { ProductCardSkeleton } from "@/components/skeletons/ProductCardSkeleton"
 
 export default function Home() {
     // Fetch sale products (products with originalPrice)
-    const { data: saleProductsData, isLoading: isSaleLoading } = useUserProducts({
+    const { data: saleProductsData } = useUserProducts({
         isSale: "true",
         limit: "4"
     });
@@ -17,7 +17,7 @@ export default function Home() {
 
     // Fetch all products
     const { data: allProductsData, isLoading: isAllProductsLoading } = useUserProducts({
-        limit: "8"
+        limit: "10"
     });
     const allProducts = allProductsData?.data?.products || [];
 
