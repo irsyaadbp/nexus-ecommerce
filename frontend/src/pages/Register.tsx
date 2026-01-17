@@ -1,19 +1,13 @@
-import { Link, Navigate, useNavigate } from "react-router";
+import { Link, Navigate } from "react-router";
 import { Button } from "../components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, type RegisterFormData } from "@/schemas/auth.schema";
-import { authService } from "@/services/auth.service";
-import { toast } from "sonner";
-import { useState } from "react";
 
 export default function Register() {
-    const { isAuthenticated, isLoading: authLoading } = useAuth();
-    const navigate = useNavigate();
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
+    const { isAuthenticated, isLoading: authLoading, register: registerMutation } = useAuth();
     const {
         register,
         handleSubmit,
@@ -22,20 +16,14 @@ export default function Register() {
         resolver: zodResolver(registerSchema),
     });
 
-    const onSubmit = async (data: RegisterFormData) => {
-        setIsSubmitting(true);
-        try {
-            await authService.userRegister(data);
-            toast.success("Account created successfully! Please login.");
-            navigate("/login");
-        } catch (error: any) {
-            toast.error(error.message || "Failed to create account");
-        } finally {
-            setIsSubmitting(false);
-        }
+    // Determine if form interacts with the API
+    const isSubmitting = registerMutation.isPending;
+
+    const onSubmit = (data: RegisterFormData) => {
+        registerMutation.mutate(data);
     };
 
-    if (authLoading) {
+    if (authLoading && !isSubmitting) { // Avoid full screen loader when submitting form if it shares isLoading
         return (
             <div className="min-h-svh flex items-center justify-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
