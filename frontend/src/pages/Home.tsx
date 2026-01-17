@@ -5,17 +5,18 @@ import { Link } from "react-router";
 import { ProductCard } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { useUserProducts } from "@/hooks/useProducts";
+import { ProductCardSkeleton } from "@/components/skeletons/ProductCardSkeleton";
 
 export default function Home() {
     // Fetch sale products (products with originalPrice)
-    const { data: saleProductsData } = useUserProducts({
+    const { data: saleProductsData, isLoading: isSaleLoading } = useUserProducts({
         isSale: "true",
         limit: "4"
     });
     const saleProducts = saleProductsData?.data?.products || [];
 
     // Fetch all products
-    const { data: allProductsData } = useUserProducts({
+    const { data: allProductsData, isLoading: isAllProductsLoading } = useUserProducts({
         limit: "8"
     });
     const allProducts = allProductsData?.data?.products || [];
@@ -74,7 +75,9 @@ export default function Home() {
                         <div className="flex items-center gap-3">
                             <div className="h-8 w-1 bg-primary rounded-full" />
                             <h2 className="text-xl font-bold text-foreground">Semua Produk</h2>
-                            <span className="text-sm text-muted-foreground">({allProducts.length})</span>
+                            <span className="text-sm text-muted-foreground">
+                                {isAllProductsLoading ? "..." : `(${allProducts.length})`}
+                            </span>
                         </div>
                     </motion.div>
 
@@ -86,13 +89,18 @@ export default function Home() {
                         whileInView="visible"
                         viewport={{ once: true }}
                     >
-                        {allProducts.map((product, index) => (
-                            <ProductCard key={product._id} product={product} index={index} />
-                        ))}
+                        {isAllProductsLoading
+                            ? [...Array(10)].map((_, index) => (
+                                <ProductCardSkeleton key={index} />
+                            ))
+                            : allProducts.map((product, index) => (
+                                <ProductCard key={product._id} product={product} index={index} />
+                            ))
+                        }
                     </motion.div>
 
                     {/* Load More */}
-                    <motion.div
+                    {!isAllProductsLoading && <motion.div
                         className="mt-8 text-center"
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -104,7 +112,7 @@ export default function Home() {
                                 <ArrowRight className="h-4 w-4" />
                             </Button>
                         </Link>
-                    </motion.div>
+                    </motion.div>}
                 </div>
             </section>
         </main>
