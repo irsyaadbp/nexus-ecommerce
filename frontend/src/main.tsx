@@ -10,6 +10,9 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 
+import LogRocket from 'logrocket';
+LogRocket.init(import.meta.env.VITE_LOGROCKET_APP_KEY);
+
 const queryClient = new QueryClient()
 
 
