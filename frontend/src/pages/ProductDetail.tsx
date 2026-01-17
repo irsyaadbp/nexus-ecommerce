@@ -20,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { ProductCard } from "@/components/ProductCard";
 import { useUserProductBySlug, useUserProducts } from "@/hooks/useProducts";
 import { ProductCardSkeleton } from "@/components/skeletons/ProductCardSkeleton";
+import { useAnalytic } from "@/hooks/useAnalytic";
 
 const MotionButton = motion.create(Button);
 const MotionBadge = motion.create(Badge);
@@ -30,6 +31,8 @@ export default function ProductDetail() {
     const [selectedImage, setSelectedImage] = useState(0);
     const [selectedSize, setSelectedSize] = useState(0);
     const [quantity, setQuantity] = useState(1);
+
+    const log = useAnalytic()
 
     // Fetch product by slug
     const { data: productData, isLoading, isError } = useUserProductBySlug(slug);
@@ -89,6 +92,21 @@ export default function ProductDetail() {
     const discount = product.originalPrice
         ? Math.round((1 - product.price / product.originalPrice) * 100)
         : 0;
+
+    function handleAddToCart() {
+        if (!product) return
+
+        alert("Produk berhasil ditambahkan ke keranjang");
+        log.addToCart({
+            price: product.price,
+            date: new Date().toISOString(),
+            productName: product.name,
+            category: product.category,
+            variant: product.variants?.[selectedSize]?.name,
+            originalPrice: product.originalPrice,
+            quantity,
+        });
+    }
 
     return (
         <section>
@@ -266,6 +284,7 @@ export default function ProductDetail() {
                                 className="flex-1"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
+                                onClick={handleAddToCart}
                             >
                                 <ShoppingBag className="h-5 w-5" />
                                 Tambah ke Keranjang

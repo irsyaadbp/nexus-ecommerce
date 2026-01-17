@@ -1,6 +1,16 @@
 import { Link, useLocation } from "react-router";
-import { ShoppingBag, Heart, Menu, X, UserIcon, SettingsIcon, LogOutIcon, LayoutDashboard, ShoppingBasket } from "lucide-react";
-import { useState } from "react";
+import {
+    ShoppingBag,
+    Heart,
+    Menu,
+    X,
+    UserIcon,
+    SettingsIcon,
+    LogOutIcon,
+    LayoutDashboard,
+    ShoppingBasket,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./Logo";
 import { useAuth } from "@/hooks/useAuth";
@@ -13,6 +23,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router";
+import { useAnalytic } from "@/hooks/useAnalytic";
 
 export function Navbar() {
     const location = useLocation();
@@ -20,47 +31,53 @@ export function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { user, isAuthenticated, logout } = useAuth();
 
+    const log = useAnalytic();
+
     const navLinks = [
         { name: "Beranda", path: "/" },
         { name: "Produk", path: "/products" },
         { name: "Tentang", path: "/about" },
-        { name: "Kontak", path: "/contact" }
+        { name: "Kontak", path: "/contact" },
     ];
 
     const listItems = [
         {
             icon: UserIcon,
-            property: 'Profile',
+            property: "Profile",
             admin: false,
-            onClick: () => navigate('/profile')
+            onClick: () => navigate("/profile"),
         },
         {
             icon: ShoppingBasket,
-            property: 'My Orders',
+            property: "My Orders",
             admin: false,
-            onClick: () => navigate('/orders')
+            onClick: () => navigate("/orders"),
         },
         {
             icon: LayoutDashboard,
-            property: 'Go to Dashboard',
+            property: "Go to Dashboard",
             admin: true,
-            onClick: () => navigate('/admin')
+            onClick: () => navigate("/admin"),
         },
         {
             icon: SettingsIcon,
-            property: 'Settings',
+            property: "Settings",
             admin: false,
-            onClick: () => navigate('/settings')
+            onClick: () => navigate("/settings"),
         },
         {
             icon: LogOutIcon,
-            property: 'Sign Out',
+            property: "Sign Out",
             admin: false,
-            onClick: () => logout.mutate()
-        }
-    ].filter(item => !item.admin || user?.role === 'ADMIN');
+            onClick: () => logout.mutate(),
+        },
+    ].filter((item) => !item.admin || user?.role === "ADMIN");
 
     const isActive = (path: string) => location.pathname === path;
+
+    useEffect(() => {
+        log.identify();
+    }, []);
 
     return (
         <header className="nav-header">
@@ -72,7 +89,8 @@ export function Navbar() {
                         <Link
                             key={link.path}
                             to={link.path}
-                            className={`nav-link ${isActive(link.path) ? "nav-link-active" : ""}`}
+                            className={`nav-link ${isActive(link.path) ? "nav-link-active" : ""
+                                }`}
                         >
                             {link.name}
                         </Link>
@@ -80,20 +98,27 @@ export function Navbar() {
                 </nav>
 
                 <div className="nav-icons">
-                    <Button size="icon" variant={'secondary'} aria-label="Wishlist">
+                    <Button size="icon" variant={"secondary"} aria-label="Wishlist">
                         <Heart className="h-5 w-5" />
                     </Button>
-                    <Button size="icon" variant={'secondary'} aria-label="Cart">
+                    <Button size="icon" variant={"secondary"} aria-label="Cart">
                         <ShoppingBag className="h-5 w-5" />
                     </Button>
                     {isAuthenticated ? (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant='secondary' size='icon' className='overflow-hidden rounded-full'>
-                                    <img src='https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-5.png' alt={user?.username} />
+                                <Button
+                                    variant="secondary"
+                                    size="icon"
+                                    className="overflow-hidden rounded-full"
+                                >
+                                    <img
+                                        src="https://cdn.shadcnstudio.com/ss-assets/avatar/avatar-5.png"
+                                        alt={user?.username}
+                                    />
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className='w-56' align="end">
+                            <DropdownMenuContent className="w-56" align="end">
                                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                 <DropdownMenuGroup>
                                     {listItems.map((item, index) => (
@@ -103,7 +128,9 @@ export function Navbar() {
                                             onClick={item.onClick}
                                         >
                                             <item.icon className="h-4 w-4" />
-                                            <span className='text-popover-foreground'>{item.property}</span>
+                                            <span className="text-popover-foreground">
+                                                {item.property}
+                                            </span>
                                         </DropdownMenuItem>
                                     ))}
                                 </DropdownMenuGroup>
@@ -111,19 +138,21 @@ export function Navbar() {
                         </DropdownMenu>
                     ) : (
                         <Link to="/login">
-                            <Button className="hidden lg:block">
-                                Login/Register
-                            </Button>
+                            <Button className="hidden lg:block">Login/Register</Button>
                         </Link>
                     )}
                     <Button
                         size="icon"
-                        variant={'ghost'}
+                        variant={"ghost"}
                         className="md:hidden"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         aria-label="Menu"
                     >
-                        {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                        {isMenuOpen ? (
+                            <X className="h-5 w-5" />
+                        ) : (
+                            <Menu className="h-5 w-5" />
+                        )}
                     </Button>
                 </div>
             </div>
@@ -136,7 +165,9 @@ export function Navbar() {
                             <Link
                                 key={link.path}
                                 to={link.path}
-                                className={`py-3 text-base font-medium transition-colors ${isActive(link.path) ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                                className={`py-3 text-base font-medium transition-colors ${isActive(link.path)
+                                        ? "text-primary"
+                                        : "text-muted-foreground hover:text-foreground"
                                     }`}
                                 onClick={() => setIsMenuOpen(false)}
                             >
@@ -144,10 +175,12 @@ export function Navbar() {
                             </Link>
                         ))}
                         {!isAuthenticated && (
-                            <Link to="/login" className="w-full" onClick={() => setIsMenuOpen(false)}>
-                                <Button className="mt-6 w-full">
-                                    Login/Register
-                                </Button>
+                            <Link
+                                to="/login"
+                                className="w-full"
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                <Button className="mt-6 w-full">Login/Register</Button>
                             </Link>
                         )}
                     </nav>
@@ -155,5 +188,4 @@ export function Navbar() {
             )}
         </header>
     );
-};
-
+}
