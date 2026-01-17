@@ -2,13 +2,14 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { authService } from "../services/auth.service";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { SESSION_TOKEN_KEY } from "../lib/constants";
 
 export const useUserMe = () => {
     return useQuery({
         queryKey: ['user-me'],
         queryFn: authService.getUserMe,
         retry: false,
-        enabled: !!localStorage.getItem('token'),
+        enabled: !!localStorage.getItem(SESSION_TOKEN_KEY),
     });
 };
 
@@ -19,7 +20,7 @@ export const useLoginUser = () => {
     return useMutation({
         mutationFn: authService.userLogin,
         onSuccess: (response) => {
-            localStorage.setItem('token', response.data.token);
+            localStorage.setItem(SESSION_TOKEN_KEY, response.data.token);
             queryClient.invalidateQueries({ queryKey: ['user-me'] });
             toast.success("Logged in successfully");
             navigate('/');
@@ -39,13 +40,13 @@ export const useLogoutUser = () => {
     return useMutation({
         mutationFn: authService.logoutUser,
         onSuccess: () => {
-            localStorage.removeItem('token');
+            localStorage.removeItem(SESSION_TOKEN_KEY);
             queryClient.clear();
             toast.success("Logged out successfully");
             navigate('/login');
         },
         onSettled: () => {
-            localStorage.removeItem('token');
+            localStorage.removeItem(SESSION_TOKEN_KEY);
             queryClient.clear();
             navigate('/login');
         }

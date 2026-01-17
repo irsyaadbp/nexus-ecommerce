@@ -3,13 +3,14 @@ import { authService } from "../services/auth.service";
 import type { LoginInput } from "../types/auth.types";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { SESSION_TOKEN_KEY } from "../lib/constants";
 
 export const useAdminMe = () => {
     return useQuery({
         queryKey: ['admin-me'],
         queryFn: authService.getAdminMe,
         retry: false,
-        enabled: !!localStorage.getItem('token'),
+        enabled: !!localStorage.getItem(SESSION_TOKEN_KEY),
     });
 };
 
@@ -20,7 +21,7 @@ export const useLoginAdmin = () => {
     return useMutation({
         mutationFn: (data: LoginInput) => authService.adminLogin(data),
         onSuccess: (response) => {
-            localStorage.setItem('token', response.data.token);
+            localStorage.setItem(SESSION_TOKEN_KEY, response.data.token);
             queryClient.setQueryData(['admin-me'], { data: response.data.user });
             toast.success("Login successful");
             navigate('/admin');
@@ -38,13 +39,13 @@ export const useLogoutAdmin = () => {
     return useMutation({
         mutationFn: authService.logoutAdmin,
         onSuccess: () => {
-            localStorage.removeItem('token');
+            localStorage.removeItem(SESSION_TOKEN_KEY);
             queryClient.clear();
             toast.success("Logged out successfully");
             navigate('/admin/login');
         },
         onSettled: () => {
-            localStorage.removeItem('token');
+            localStorage.removeItem(SESSION_TOKEN_KEY);
             queryClient.clear();
             navigate('/admin/login');
         }

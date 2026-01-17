@@ -11,7 +11,11 @@ import {
 } from '@tanstack/react-query'
 
 import LogRocket from 'logrocket';
-LogRocket.init(import.meta.env.VITE_LOGROCKET_APP_KEY);
+import { getVisitorId } from './hooks/useVisitor';
+import { LOGROCKET_APP_KEY } from './lib/constants';
+
+LogRocket.init(LOGROCKET_APP_KEY);
+LogRocket.identify(getVisitorId());
 
 const queryClient = new QueryClient()
 

@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+import { SESSION_TOKEN_KEY, API_BASE_URL as BASE_URL } from './constants';
 
 export type FetchOptions = RequestInit & {
     params?: Record<string, string>;
@@ -14,7 +14,7 @@ export async function fetcher<T>(endpoint: string, options: FetchOptions = {}): 
     }
 
     // Get token from localStorage
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem(SESSION_TOKEN_KEY);
 
     // Set default headers
     const headers = new Headers(init.headers);
@@ -31,7 +31,7 @@ export async function fetcher<T>(endpoint: string, options: FetchOptions = {}): 
     });
 
     if (response.status === 401) {
-        localStorage.removeItem('token');
+        localStorage.removeItem(SESSION_TOKEN_KEY);
 
         const isAuthEndpoint = ['/admin/login', '/user/login', '/user/register'].includes(endpoint);
         const isAuthPage = ['/login', '/admin/login', '/register'].includes(window.location.pathname);

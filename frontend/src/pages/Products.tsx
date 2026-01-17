@@ -8,7 +8,7 @@ import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, Pagi
 import { useUserProducts, useUserCategories } from "@/hooks/useProducts";
 import { useDebounce } from "@/hooks/useDebounce";
 
-const PRODUCTS_PER_PAGE = 12;
+import { PRODUCTS_PER_PAGE } from "@/lib/constants";
 
 export default function Products() {
     const [selectedCategory, setSelectedCategory] = useState("all");

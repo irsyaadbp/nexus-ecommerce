@@ -1,10 +1,11 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 import { useAuthAdmin } from "../../hooks/useAuthAdmin";
+import { SESSION_TOKEN_KEY } from "@/lib/constants";
 
 export const ProtectedRoute = () => {
     const { isAuthenticated, isLoading, admin } = useAuthAdmin();
     const location = useLocation();
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem(SESSION_TOKEN_KEY);
 
     if (!token) {
         return <Navigate to="/admin/login" state={{ from: location }} replace />;
