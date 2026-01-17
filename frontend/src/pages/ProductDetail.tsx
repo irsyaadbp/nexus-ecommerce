@@ -2,12 +2,24 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { motion } from "motion/react";
 import { Link } from "react-router";
-import { Truck, Shield, RefreshCw, ShoppingBag, Heart, Star, ChevronRight, Minus, Plus, Loader2 } from "lucide-react";
+import {
+    Truck,
+    Shield,
+    RefreshCw,
+    ShoppingBag,
+    Heart,
+    Star,
+    ChevronRight,
+    Minus,
+    Plus,
+    Loader2,
+} from "lucide-react";
 import { formatPrice } from "@/lib/formatPrice";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ProductCard } from "@/components/ProductCard";
 import { useUserProductBySlug, useUserProducts } from "@/hooks/useProducts";
+import { ProductCardSkeleton } from "@/components/skeletons/ProductCardSkeleton";
 
 const MotionButton = motion.create(Button);
 const MotionBadge = motion.create(Badge);
@@ -24,11 +36,14 @@ export default function ProductDetail() {
     const product = productData?.data;
 
     // Fetch related products (same category)
-    const { data: relatedData } = useUserProducts({
+    const { data: relatedData, isLoading: isRelatedLoading } = useUserProducts({
         category: product?.category || "",
-        limit: "5"
+        limit: "5",
     });
-    const relatedProducts = relatedData?.data?.products?.filter(p => p._id !== product?._id)?.slice(0, 4) || [];
+    const relatedProducts =
+        relatedData?.data?.products
+            ?.filter((p) => p._id !== product?._id)
+            ?.slice(0, 4) || [];
 
     // Reset state when slug changes
     useEffect(() => {
@@ -54,11 +69,11 @@ export default function ProductDetail() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                 >
-                    <h1 className="text-2xl font-bold text-foreground mb-4">Produk tidak ditemukan</h1>
+                    <h1 className="text-2xl font-bold text-foreground mb-4">
+                        Produk tidak ditemukan
+                    </h1>
                     <Link to="/products">
-                        <Button>
-                            Kembali ke Produk
-                        </Button>
+                        <Button>Kembali ke Produk</Button>
                     </Link>
                 </motion.div>
             </div>
@@ -68,7 +83,7 @@ export default function ProductDetail() {
     const features = [
         { icon: Truck, text: "Gratis ongkir untuk pembelian di atas Rp 500.000" },
         { icon: Shield, text: "Garansi 1 tahun untuk semua produk" },
-        { icon: RefreshCw, text: "30 hari pengembalian tanpa syarat" }
+        { icon: RefreshCw, text: "30 hari pengembalian tanpa syarat" },
     ];
 
     const discount = product.originalPrice
@@ -104,7 +119,9 @@ export default function ProductDetail() {
                                     <MotionButton
                                         key={index}
                                         onClick={() => setSelectedImage(index)}
-                                        className={`product-detail-thumbnail ${selectedImage === index ? "product-detail-thumbnail-active" : ""
+                                        className={`product-detail-thumbnail ${selectedImage === index
+                                            ? "product-detail-thumbnail-active"
+                                            : ""
                                             } !p-0`}
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
@@ -123,9 +140,16 @@ export default function ProductDetail() {
                     >
                         {/* Breadcrumb */}
                         <nav className="product-detail-breadcrumb">
-                            <Link to="/" className="hover:text-primary transition-colors">Beranda</Link>
+                            <Link to="/" className="hover:text-primary transition-colors">
+                                Beranda
+                            </Link>
                             <ChevronRight className="h-4 w-4" />
-                            <Link to="/products" className="hover:text-primary transition-colors">Produk</Link>
+                            <Link
+                                to="/products"
+                                className="hover:text-primary transition-colors"
+                            >
+                                Produk
+                            </Link>
                             <ChevronRight className="h-4 w-4" />
                             <span className="text-foreground">{product.category}</span>
                         </nav>
@@ -152,7 +176,9 @@ export default function ProductDetail() {
 
                         {/* Price */}
                         <div className="flex items-center gap-3">
-                            <span className="product-detail-price">{formatPrice(product.price)}</span>
+                            <span className="product-detail-price">
+                                {formatPrice(product.price)}
+                            </span>
                             {product.originalPrice && (
                                 <>
                                     <span className="text-xl text-muted-foreground line-through">
@@ -177,15 +203,18 @@ export default function ProductDetail() {
                         {product.variants?.[0] && (
                             <div className="product-detail-options">
                                 <span className="product-detail-option-label">
-                                    Variant: <strong className="text-primary">{product.variants[selectedSize]?.name}</strong>
+                                    Variant:{" "}
+                                    <strong className="text-primary">
+                                        {product.variants[selectedSize]?.name}
+                                    </strong>
                                 </span>
                                 <div className="product-detail-sizes">
                                     {product.variants.map((variant, index) => (
                                         <MotionButton
                                             key={variant.name}
                                             onClick={() => setSelectedSize(index)}
-                                            size={'sm'}
-                                            variant={selectedSize === index ? 'default' : 'outline'}
+                                            size={"sm"}
+                                            variant={selectedSize === index ? "default" : "outline"}
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
                                         >
@@ -202,8 +231,8 @@ export default function ProductDetail() {
                             <div className="product-detail-quantity">
                                 <MotionButton
                                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                    variant={'secondary'}
-                                    size={'icon-lg'}
+                                    variant={"secondary"}
+                                    size={"icon-lg"}
                                     className="rounded-full"
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
@@ -220,8 +249,8 @@ export default function ProductDetail() {
                                 </motion.span>
                                 <MotionButton
                                     onClick={() => setQuantity(quantity + 1)}
-                                    variant={'secondary'}
-                                    size={'icon-lg'}
+                                    variant={"secondary"}
+                                    size={"icon-lg"}
                                     className="rounded-full"
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
@@ -242,8 +271,8 @@ export default function ProductDetail() {
                                 Tambah ke Keranjang
                             </MotionButton>
                             <MotionButton
-                                variant={'secondary'}
-                                size={'icon-lg'}
+                                variant={"secondary"}
+                                size={"icon-lg"}
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                             >
@@ -277,7 +306,19 @@ export default function ProductDetail() {
                 </div>
             </section>
 
-            {relatedProducts.length > 0 && (
+            {isRelatedLoading && (
+                <section className="products-section border-t border-border/50">
+                    <div className="container-main">
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {[...Array(4)].map((_, index) => (
+                                <ProductCardSkeleton key={index} />
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {!isRelatedLoading && relatedProducts.length > 0 && (
                 <section className="products-section border-t border-border/50">
                     <div className="container-main">
                         <motion.div
@@ -293,7 +334,11 @@ export default function ProductDetail() {
                         </motion.div>
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {relatedProducts.map((product, index) => (
-                                <ProductCard key={product._id} product={product} index={index} />
+                                <ProductCard
+                                    key={product._id}
+                                    product={product}
+                                    index={index}
+                                />
                             ))}
                         </div>
                     </div>
